@@ -512,142 +512,430 @@
         .greek-name { font-size: 0.9em; color: #666; margin-bottom: 5px; }
         .greek-value { font-size: 1.8em; font-weight: 700; color: #333; }
     
-/* ========== MOBILE RESPONSIVE STYLES ========== */
+/* ==================== MOBILE-ONLY VERSION ==================== */
+/* Designed for phones 320px - 480px width */
 
-/* Tablets and smaller (below 1024px) */
-@media (max-width: 1024px) {
-    .container {
-        margin: 10px;
-        border-radius: 10px;
-    }
-    .header h1 { font-size: 2em; }
-    .step-content { padding: 20px; }
-    .input-grid,
-    .suggestion-grid,
-    .metrics-grid,
-    .positions-panel,
-    .greeks-grid {
-        grid-template-columns: 1fr !important;
-        gap: 15px;
-    }
-    .guide-content {
-        padding: 30px 20px;
-        margin: 20px 10px;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Mobile phones (below 768px) */
-@media (max-width: 768px) {
-    body { padding: 10px; }
-    .container { border-radius: 8px; }
-    .header { padding: 20px 15px; }
-    .header h1 { font-size: 1.5em; }
-    .header p { font-size: 0.9em; }
-    .badge { font-size: 0.8em; padding: 6px 15px; }
-    .section-title { font-size: 1.4em; }
-    .step-content { padding: 15px; min-height: auto; }
-    .input-field { font-size: 16px; }
-    .btn { padding: 12px 20px; font-size: 1em; width: 100%; }
-    .btn-group { flex-direction: column; }
-    .suggestion-grid { grid-template-columns: 1fr; }
-    .suggestion-card { padding: 15px; }
-    .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .metric-card { padding: 15px; }
-    .metric-value { font-size: 1.5em; }
-    .chart-container { padding: 15px; }
-    .slider-panel { padding: 20px 15px; }
-    .slider-label-text { font-size: 1em; }
-    .slider-value { font-size: 1.2em; padding: 3px 15px; }
-    .positions-panel { grid-template-columns: 1fr; }
-    .position-card { padding: 20px 15px; }
-    .guide-btn {
-        width: 60px;
-        height: 60px;
-        bottom: 20px;
-        right: 20px;
-        font-size: 1.8em;
-    }
-    .guide-modal { padding: 0; }
-    .guide-content {
-        margin: 0;
-        border-radius: 0;
-        max-width: 100%;
-        min-height: 100vh;
-    }
-    .guide-close { font-size: 2.5em; top: 10px; right: 15px; }
-    .guide-main-title { font-size: 2em; }
-    .guide-subtitle { font-size: 1em; }
-    .guide-nav { flex-direction: column; gap: 10px; }
-    .guide-nav-btn { width: 100%; text-align: center; }
-    .guide-chapter-title { font-size: 1.5em; }
-    .guide-subsection-title { font-size: 1.2em; }
-    .guide-table { font-size: 0.9em; }
-    .guide-table th,
-    .guide-table td { padding: 10px 8px; }
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    font-size: 14px;
 }
 
-/* Small phones (below 480px) */
-@media (max-width: 480px) {
-    .header h1 { font-size: 1.3em; }
-    .section-title { font-size: 1.2em; }
-    .metrics-grid { grid-template-columns: 1fr; }
-    .suggestion-value { font-size: 1.1em; }
-    .metric-value { font-size: 1.3em; }
-    .guide-main-title { font-size: 1.5em; }
-    .guide-chapter-title { font-size: 1.3em; }
-    .guide-text,
-    .guide-list li { font-size: 1em; }
+body {
+    padding: 5px !important;
 }
 
-/* Landscape mode */
-@media (max-height: 500px) and (orientation: landscape) {
-    .guide-btn {
-        bottom: 10px;
-        right: 10px;
-        width: 50px;
-        height: 50px;
-        font-size: 1.5em;
-    }
+.container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 5px !important;
 }
 
-/* Touch devices */
-@media (hover: none) and (pointer: coarse) {
-    .btn,
-    .add-btn,
-    .remove-btn,
-    .edit-btn,
-    .suggestion-card,
-    .strategy-card {
-        min-height: 44px;
-    }
-    .btn:active,
-    .suggestion-card:active,
-    .strategy-card:active {
-        opacity: 0.7;
-    }
+/* Header */
+.header {
+    padding: 12px 10px !important;
 }
 
-/* Table scroll */
-.guide-table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 20px 0;
+.header h1 {
+    font-size: 1.3em !important;
+    line-height: 1.3 !important;
 }
-.guide-table-container::-webkit-scrollbar { height: 8px; }
-.guide-table-container::-webkit-scrollbar-thumb {
+
+.header p {
+    font-size: 0.85em !important;
+    margin-top: 5px !important;
+}
+
+.badge {
+    font-size: 0.7em !important;
+    padding: 4px 10px !important;
+}
+
+/* Content */
+.step-content {
+    padding: 12px 8px !important;
+    min-height: auto !important;
+}
+
+.section-title {
+    font-size: 1.1em !important;
+    margin-bottom: 12px !important;
+}
+
+/* ALL inputs and selects */
+input, select, textarea {
+    width: 100% !important;
+    font-size: 16px !important;
+    padding: 12px 8px !important;
+    margin: 8px 0 !important;
+    border: 2px solid #ddd !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+}
+
+.input-label {
+    font-size: 0.9em !important;
+    margin: 10px 0 5px 0 !important;
+    display: block !important;
+}
+
+/* ALL buttons */
+button, .btn {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    font-size: 1em !important;
+    margin: 10px 0 !important;
+    border-radius: 6px !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+}
+
+button:active, .btn:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+
+/* Button groups - stack vertically */
+.btn-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.btn-group button, .btn-group .btn {
+    margin: 0 !important;
+}
+
+/* ALL grids - single column */
+.input-grid,
+.suggestion-grid,
+.metrics-grid,
+.greeks-grid,
+.positions-panel {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+/* Info boxes */
+.info-box,
+.alert-box,
+.success-box {
+    padding: 10px 8px !important;
+    font-size: 0.85em !important;
+    margin: 12px 0 !important;
+}
+
+/* Suggestion cards */
+.suggestion-panel {
+    padding: 12px 8px !important;
+    margin: 12px 0 !important;
+}
+
+.suggestion-card {
+    padding: 14px 10px !important;
+    margin: 0 !important;
+    min-height: 70px !important;
+}
+
+.suggestion-value {
+    font-size: 1.2em !important;
+}
+
+/* Metric cards */
+.metric-card {
+    padding: 12px 8px !important;
+}
+
+.metric-label {
+    font-size: 0.75em !important;
+}
+
+.metric-value {
+    font-size: 1.2em !important;
+}
+
+/* Chart */
+.chart-container {
+    padding: 8px !important;
+    margin: 12px 0 !important;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 300px !important;
+}
+
+/* Sliders */
+.slider-panel {
+    padding: 12px 8px !important;
+}
+
+.slider-group {
+    margin: 12px 0 !important;
+}
+
+.slider-label {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+    font-size: 0.9em !important;
+}
+
+.slider-value {
+    font-size: 1em !important;
+    padding: 3px 10px !important;
+}
+
+input[type="range"] {
+    width: 100% !important;
+    height: 36px !important;
+    margin: 8px 0 !important;
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+input[type="range"]::-webkit-slider-track {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
     background: #667eea;
-    border-radius: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -8px;
+}
+
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: #667eea;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Position cards */
+.position-card {
+    padding: 12px 8px !important;
+}
+
+.position-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+}
+
+.position-actions {
+    display: flex !important;
+    gap: 6px !important;
+    width: 100% !important;
+}
+
+.position-actions button {
+    flex: 1 !important;
+    min-height: 40px !important;
+    font-size: 0.85em !important;
+}
+
+/* Strategy cards */
+.strategy-grid {
+    grid-template-columns: 1fr !important;
+}
+
+.strategy-card {
+    padding: 12px !important;
+    min-height: 60px !important;
+}
+
+/* Guide button - bigger for mobile */
+.guide-btn {
+    position: fixed !important;
+    bottom: 12px !important;
+    right: 12px !important;
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 1.6em !important;
+    z-index: 9999 !important;
+    border-radius: 50% !important;
+}
+
+/* Guide modal - full screen */
+.guide-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.guide-content {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 15px 10px !important;
+    border-radius: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.guide-close {
+    position: fixed !important;
+    top: 8px !important;
+    right: 10px !important;
+    font-size: 2em !important;
+    padding: 8px !important;
+    z-index: 10000 !important;
+    background: white !important;
+    border-radius: 50% !important;
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.guide-header {
+    padding: 50px 10px 20px 10px !important;
+}
+
+.guide-main-title {
+    font-size: 1.5em !important;
+    line-height: 1.2 !important;
+}
+
+.guide-subtitle {
+    font-size: 0.85em !important;
+    margin-top: 8px !important;
+}
+
+/* Guide navigation - stack */
+.guide-nav {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin: 20px 0 !important;
+}
+
+.guide-nav-btn {
+    width: 100% !important;
+    padding: 12px 10px !important;
+    font-size: 0.9em !important;
+    text-align: center !important;
+    min-height: 44px !important;
+}
+
+/* Guide content */
+.guide-chapter {
+    margin: 20px 0 !important;
+}
+
+.guide-chapter-title {
+    font-size: 1.3em !important;
+    margin-bottom: 12px !important;
+}
+
+.guide-subsection {
+    padding: 12px 8px !important;
+    margin: 15px 0 !important;
+}
+
+.guide-subsection-title {
+    font-size: 1.1em !important;
+}
+
+.guide-text,
+.guide-list li {
+    font-size: 0.9em !important;
+    line-height: 1.5 !important;
+}
+
+.guide-highlight,
+.guide-formula,
+.guide-example {
+    padding: 10px 8px !important;
+    margin: 12px 0 !important;
+    font-size: 0.85em !important;
+}
+
+/* Tables - scrollable */
+.guide-table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 12px -8px !important;
+}
+
+.guide-table {
+    width: 100% !important;
+    min-width: 400px !important;
+    font-size: 0.8em !important;
+}
+
+.guide-table th,
+.guide-table td {
+    padding: 8px 6px !important;
+    white-space: nowrap !important;
+}
+
+/* Lists */
+.guide-list {
+    padding-left: 20px !important;
+}
+
+.guide-list li {
+    margin: 8px 0 !important;
+}
+
+/* Ensure no horizontal scroll */
+img, canvas, video {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* iOS fixes */
+@supports (-webkit-touch-callout: none) {
+    button, .btn, .suggestion-card, .strategy-card {
+        -webkit-user-select: none;
+        user-select: none;
+    }
 }
 
 
-        /* Guide styles */
         .guide-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            background: linear-gradient(135deg, #ff9800, #ff5722);
             border-radius: 50%;
             border: none;
             color: white;
@@ -657,155 +945,121 @@
             z-index: 1000;
             animation: bounce 2s infinite;
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .guide-modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
             z-index: 2000;
             overflow-y: auto;
         }
         .guide-modal.active { display: block; }
         .guide-content {
-            max-width: 1400px;
-            margin: 50px auto;
+            max-width: 100%;
+            margin: 0;
             background: white;
-            border-radius: 15px;
-            padding: 50px;
-            position: relative;
+            border-radius: 0;
+            padding: 20px 15px;
+            min-height: 100vh;
         }
         .guide-close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 3em;
+            position: fixed;
+            top: 10px; right: 15px;
+            font-size: 2.5em;
             cursor: pointer;
             color: #666;
+            z-index: 3000;
         }
-        .guide-header { text-align: center; margin-bottom: 30px; }
+        .guide-header { text-align: center; margin-bottom: 20px; }
         .guide-main-title {
-            font-size: 3em;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 2em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            margin-bottom: 10px;
         }
-        .guide-subtitle {
-            font-size: 1.3em;
-            color: #666;
-        }
+        .guide-subtitle { font-size: 1em; color: #666; margin-top: 8px; }
         .guide-nav {
             display: flex;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
         }
         .guide-nav-btn {
-            padding: 12px 25px;
+            padding: 12px;
             background: #f0f0f0;
             border: 2px solid #ddd;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
-        }
-        .guide-nav-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
         }
         .guide-nav-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border-color: #667eea;
         }
         .guide-section { display: none; }
         .guide-section.active { display: block; }
-        .guide-chapter { margin: 40px 0; }
+        .guide-chapter { margin: 25px 0; }
         .guide-chapter-title {
-            font-size: 2em;
+            font-size: 1.5em;
             color: #667eea;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
         .guide-subsection {
-            margin: 30px 0;
-            padding: 20px;
+            margin: 20px 0;
+            padding: 15px;
             background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #667eea;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
         }
-        .guide-subsection-title {
-            font-size: 1.5em;
-            color: #333;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        .guide-text {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #444;
-            margin: 15px 0;
-        }
+        .guide-subsection-title { font-size: 1.2em; margin-bottom: 10px; font-weight: 700; }
+        .guide-text { font-size: 1em; line-height: 1.6; margin: 10px 0; }
         .guide-highlight {
             background: #fffbea;
-            border-left: 4px solid #ff9800;
-            padding: 15px;
-            margin: 20px 0;
+            border-left: 3px solid #ff9800;
+            padding: 12px;
+            margin: 15px 0;
             border-radius: 5px;
         }
         .guide-formula {
             background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 20px;
-            margin: 20px 0;
+            border-left: 3px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
             border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
+            font-family: monospace;
         }
         .guide-example {
             background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 20px;
-            margin: 20px 0;
+            border-left: 3px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
             border-radius: 5px;
+        }
+        .guide-table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 15px 0;
         }
         .guide-table {
             width: 100%;
+            min-width: 350px;
             border-collapse: collapse;
-            margin: 20px 0;
         }
         .guide-table th {
             background: #667eea;
             color: white;
-            padding: 15px;
+            padding: 12px 8px;
             text-align: left;
-            font-weight: 700;
         }
-        .guide-table td {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        .guide-table tr:hover { background: #f5f5f5; }
-        .guide-list {
-            margin: 15px 0;
-            padding-left: 30px;
-        }
-        .guide-list li {
-            margin: 10px 0;
-            font-size: 1.05em;
-            line-height: 1.6;
-        }
+        .guide-table td { padding: 12px 8px; border-bottom: 1px solid #ddd; }
+        .guide-list { margin: 12px 0; padding-left: 25px; }
+        .guide-list li { margin: 8px 0; line-height: 1.5; }
 
     </style>
 </head>
@@ -1578,56 +1832,48 @@
         }
     </script>
 
-    <!-- BILLION DOLLAR GUIDE -->
-    <button class="guide-btn" onclick="openGuide()" title="Options University">📚</button>
+    <button class="guide-btn" onclick="openGuide()">📚</button>
 
     <div class="guide-modal" id="guideModal">
         <div class="guide-content">
             <span class="guide-close" onclick="closeGuide()">&times;</span>
 
             <div class="guide-header">
-                <div class="guide-main-title">📚 OPTIONS UNIVERSITY 🎓</div>
-                <div class="guide-subtitle">Complete Guide to Options & Calendar Spreads</div>
+                <div class="guide-main-title">📚 OPTIONS GUIDE</div>
+                <div class="guide-subtitle">Calendar Spreads Essentials</div>
             </div>
 
             <div class="guide-nav">
-                <button class="guide-nav-btn active" onclick="showGuideSection('basics')">Basics</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('greeks')">Greeks</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('delta-dte')">Delta & DTE</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('strategies')">Strategies</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('calendar')">Calendars</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('advanced')">Advanced</button>
+                <button class="guide-nav-btn active" onclick="showGuideSection('basics')">📖 Basics</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('greeks')">🔬 Greeks</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('calendar')">📅 Calendars</button>
             </div>
 
             <div class="guide-section active" id="guide-basics">
                 <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 1: Options Fundamentals</h2>
+                    <h2 class="guide-chapter-title">Options Basics</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">CALL vs PUT Options</h3>
+                        <h3 class="guide-subsection-title">CALL vs PUT</h3>
                         <div class="guide-table-container">
                         <table class="guide-table">
-                            <tr><th>Aspect</th><th>CALL</th><th>PUT</th></tr>
-                            <tr><td>Right to</td><td>BUY asset</td><td>SELL asset</td></tr>
-                            <tr><td>When buy</td><td>BULLISH (expect ↑)</td><td>BEARISH (expect ↓)</td></tr>
-                            <tr><td>Profit if</td><td>Price > Strike</td><td>Price < Strike</td></tr>
-                            <tr><td>Max profit</td><td>Unlimited (buying)</td><td>Strike - Premium</td></tr>
+                            <tr><th>Type</th><th>CALL</th><th>PUT</th></tr>
+                            <tr><td>View</td><td>Bullish ↑</td><td>Bearish ↓</td></tr>
+                            <tr><td>Right</td><td>BUY asset</td><td>SELL asset</td></tr>
+                            <tr><td>Profit</td><td>Price > Strike</td><td>Price < Strike</td></tr>
                         </table>
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">ITM / ATM / OTM</h3>
-                        <div class="guide-table-container">
-                        <table class="guide-table">
-                            <tr><th>Type</th><th>Delta</th><th>Description</th></tr>
-                            <tr><td><strong>ITM</strong></td><td>0.50-1.00</td><td>Has intrinsic value, expensive</td></tr>
-                            <tr><td><strong>ATM</strong></td><td>~0.50</td><td>Strike = Spot, BEST for calendars!</td></tr>
-                            <tr><td><strong>OTM</strong></td><td>0.00-0.50</td><td>No intrinsic value, cheaper</td></tr>
-                        </table>
-                        </div>
+                        <h3 class="guide-subsection-title">Moneyness</h3>
+                        <ul class="guide-list">
+                            <li><strong>ITM:</strong> Has value, Delta 0.50-1.00</li>
+                            <li><strong>ATM:</strong> Strike = Price, Delta ~0.50 ⭐</li>
+                            <li><strong>OTM:</strong> No value, Delta 0.00-0.50</li>
+                        </ul>
                         <div class="guide-highlight">
-                            <strong>💡 Formula:</strong> Option Premium = Intrinsic Value + Time Value
+                            <strong>For calendar spreads: Always use ATM!</strong>
                         </div>
                     </div>
                 </div>
@@ -1635,194 +1881,103 @@
 
             <div class="guide-section" id="guide-greeks">
                 <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 2: The Greeks</h2>
+                    <h2 class="guide-chapter-title">The Greeks</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">🔺 DELTA - Direction & Probability</h3>
-                        <p class="guide-text">Delta = Change in option price ÷ Change in underlying</p>
+                        <h3 class="guide-subsection-title">Delta</h3>
+                        <p class="guide-text">Shows direction & probability</p>
                         <div class="guide-example">
-                            <strong>Example:</strong> Delta 0.50 means if BTC moves ₹100, option moves ₹50<br>
-                            <strong>Also:</strong> Delta 0.50 = ~50% probability of expiring ITM
+                            Delta 0.50 = 50% chance ITM<br>
+                            Delta 0.50 = option moves ₹50 per ₹100 underlying
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">⏰ THETA - Time Decay</h3>
+                        <h3 class="guide-subsection-title">Theta (Time Decay)</h3>
                         <div class="guide-table-container">
                         <table class="guide-table">
-                            <tr><th>DTE</th><th>Decay Rate</th><th>Strategy</th></tr>
-                            <tr><td>60+ DTE</td><td>~2%/day</td><td>Buy for calendars</td></tr>
-                            <tr><td>7-15 DTE</td><td>~10-15%/day</td><td>Calendar LONG leg</td></tr>
-                            <tr><td>0-7 DTE</td><td>~30-50%/day</td><td>Calendar SHORT leg!</td></tr>
+                            <tr><th>DTE</th><th>Decay/Day</th></tr>
+                            <tr><td>60+ days</td><td>~2%</td></tr>
+                            <tr><td>14-21 days</td><td>~6-8%</td></tr>
+                            <tr><td>3-7 days</td><td>~15-20%</td></tr>
+                            <tr><td>0-3 days</td><td>~30-50%</td></tr>
                         </table>
                         </div>
                         <div class="guide-highlight">
-                            <strong>🔥 Last 7 days = 30-50% of premium lost!</strong>
+                            <strong>Last 7 days = 30-50% premium lost!</strong>
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">📊 VEGA - Volatility</h3>
-                        <p class="guide-text">Vega = Change per 1% IV change. Calendar spreads are LONG VEGA (profit from IV increase)</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="guide-section" id="guide-delta-dte">
-                <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 3: Delta & DTE Connection</h2>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Premium Decay by DTE</h3>
-                        <div class="guide-table-container">
-                        <table class="guide-table">
-                            <tr><th>Days</th><th>Daily Decay</th><th>Use</th></tr>
-                            <tr><td>60+ DTE</td><td>1-2%</td><td>LEAPS</td></tr>
-                            <tr><td>14-21 DTE</td><td>6-8%</td><td><strong>Calendar LONG</strong></td></tr>
-                            <tr><td>3-7 DTE</td><td>12-18%</td><td><strong>Calendar SHORT</strong></td></tr>
-                            <tr><td>0-3 DTE</td><td>30-50%</td><td>0DTE only</td></tr>
-                        </table>
-                        </div>
-                        <div class="guide-highlight">
-                            <strong>🎯 Sweet Spot:</strong> SHORT 3-7 DTE + LONG 14-21 DTE = Max theta edge!
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="guide-section" id="guide-strategies">
-                <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 4: All Strategies</h2>
-
-                    <div class="guide-subsection">
-                        <div class="guide-table-container">
-                        <table class="guide-table">
-                            <tr><th>Strategy</th><th>View</th><th>Win Rate</th></tr>
-                            <tr><td>Long Call/Put</td><td>Directional</td><td>30-40%</td></tr>
-                            <tr><td>Iron Condor</td><td>Neutral</td><td>65-75%</td></tr>
-                            <tr><td>Straddle</td><td>Volatility</td><td>30-40%</td></tr>
-                            <tr><td>Calendar Spread</td><td>Neutral</td><td>55-65%</td></tr>
-                            <tr><td><strong>DOUBLE Calendar</strong></td><td>Neutral</td><td><strong>65-75%</strong> ⭐</td></tr>
-                        </table>
-                        </div>
+                        <h3 class="guide-subsection-title">Vega</h3>
+                        <p class="guide-text">Volatility sensitivity<br>Calendar spreads profit when IV increases</p>
                     </div>
                 </div>
             </div>
 
             <div class="guide-section" id="guide-calendar">
                 <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 5: Calendar Spread Mastery</h2>
+                    <h2 class="guide-chapter-title">Calendar Spreads</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Three Types</h3>
+                        <h3 class="guide-subsection-title">Setup</h3>
                         <ul class="guide-list">
-                            <li><strong>PUT Calendar:</strong> Neutral/bearish, 55-60% win rate</li>
-                            <li><strong>CALL Calendar:</strong> Neutral/bullish, 55-60% win rate</li>
-                            <li><strong>DOUBLE Calendar:</strong> Market neutral, <strong>65-75% win rate</strong> ⭐</li>
+                            <li><strong>SHORT:</strong> 3-7 DTE (fast decay)</li>
+                            <li><strong>LONG:</strong> 14-21 DTE (slow decay)</li>
+                            <li><strong>Strike:</strong> ATM (Delta ~0.50)</li>
+                            <li><strong>Type:</strong> PUT, CALL, or DOUBLE</li>
                         </ul>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">When to Trade</h3>
+                        <h3 class="guide-subsection-title">Win Rate</h3>
                         <div class="guide-table-container">
                         <table class="guide-table">
-                            <tr><th>Condition</th><th>Why</th></tr>
-                            <tr><td>Low IV (<50%)</td><td>Cheap to buy</td></tr>
-                            <tr><td>Expect IV rise</td><td>Long vega profits</td></tr>
-                            <tr><td>Range-bound</td><td>Price stays near strike</td></tr>
-                            <tr><td>5-7 days SHORT</td><td>Max theta difference</td></tr>
+                            <tr><th>Type</th><th>Win Rate</th></tr>
+                            <tr><td>PUT Calendar</td><td>55-60%</td></tr>
+                            <tr><td>CALL Calendar</td><td>55-60%</td></tr>
+                            <tr><td>DOUBLE Calendar</td><td>65-75% ⭐</td></tr>
                         </table>
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Strike Selection</h3>
-                        <div class="guide-highlight">
-                            <strong>🎯 RULE:</strong> Use ATM strike (Delta ~0.50) 95% of the time!<br><br>
-                            <strong>Why?</strong><br>
-                            • Max time value = max theta<br>
-                            • Widest profit zone (±5-7%)<br>
-                            • Highest liquidity<br>
-                            • Best probability
-                        </div>
+                        <h3 class="guide-subsection-title">Entry Rules</h3>
+                        <ul class="guide-list">
+                            <li>IV Rank/Percentile < 50</li>
+                            <li>Range-bound market</li>
+                            <li>ATM strike</li>
+                            <li>Risk max 2-3% of account</li>
+                        </ul>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Entry & Exit Rules</h3>
+                        <h3 class="guide-subsection-title">Exit Rules</h3>
                         <div class="guide-example">
-                            <strong>✅ ENTRY:</strong><br>
-                            • IV Rank/Percentile < 50<br>
-                            • ATM strike<br>
-                            • SHORT: 3-7 DTE, LONG: 14-21 DTE<br>
-                            • Risk max 2-3% of account<br><br>
-
-                            <strong>🚪 EXIT:</strong><br>
-                            • Take 50% profit (don't be greedy!)<br>
-                            • Cut at -50% loss<br>
-                            • Exit if price >7% away<br>
-                            • Close if IV spikes sharply
+                            <strong>✅ Take profit:</strong> 50% gain<br>
+                            <strong>❌ Cut loss:</strong> -50% loss<br>
+                            <strong>🚫 Exit if:</strong> Price >7% away
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Real Example</h3>
-                        <div class="guide-example">
-                            <strong>💰 DOUBLE Calendar Trade:</strong><br><br>
-                            <strong>Setup:</strong> BTC ₹70,000<br>
-                            SHORT 3 DTE: Sell ₹70k PUT+CALL @ ₹800 total<br>
-                            LONG 17 DTE: Buy ₹70k PUT+CALL @ ₹1,800 total<br>
-                            <strong>Net Debit: ₹1,000</strong><br><br>
-
-                            <strong>At SHORT expiry (BTC still at ₹70k):</strong><br>
-                            Short expires worthless: +₹800 profit<br>
-                            Long still worth: ₹1,400<br>
-                            Total value: ₹1,400<br>
-                            <strong>P&L: +₹400 (40% ROI)</strong> ✅<br><br>
-
-                            <strong>Profit Zone:</strong> ₹68,500 - ₹71,500 (±2.14%)<br>
-                            <strong>Win Probability: ~70%</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="guide-section" id="guide-advanced">
-                <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 6: Advanced Topics</h2>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Position Sizing</h3>
+                        <h3 class="guide-subsection-title">Example</h3>
                         <div class="guide-formula">
-                            Position Size = (Risk % × Account) ÷ Max Loss per Contract
-                        </div>
-                        <div class="guide-example">
-                            <strong>Example:</strong><br>
-                            Account: ₹10,00,000<br>
-                            Risk: 2%<br>
-                            Max loss: ₹500<br>
-                            Position = (0.02 × 10,00,000) ÷ 500 = <strong>40 contracts</strong>
-                        </div>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">🏆 Golden Rules</h3>
-                        <div class="guide-highlight">
-                            <ol class="guide-list">
-                                <li>Master calendar spreads first</li>
-                                <li>Paper trade 3 months</li>
-                                <li>Take 50% profits</li>
-                                <li>Cut at -50% loss</li>
-                                <li>Never risk >3% per trade</li>
-                                <li>Trade liquid options only</li>
-                                <li>Keep learning!</li>
-                            </ol>
+                            BTC ₹70,000<br>
+                            SHORT 3 DTE: ₹800<br>
+                            LONG 17 DTE: ₹1,800<br>
+                            Net Debit: ₹1,000<br><br>
+                            At expiry (BTC at ₹70k):<br>
+                            Short expires: +₹800<br>
+                            Long value: ₹1,400<br>
+                            <strong>Profit: ₹400 (40%!)</strong>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div style="text-align: center; margin: 40px 0;">
-                <button class="btn" onclick="closeGuide()">✅ Close & Start Trading</button>
+            <div style="text-align: center; margin: 25px 0;">
+                <button class="btn" onclick="closeGuide()">✅ Close</button>
             </div>
         </div>
     </div>
@@ -1841,11 +1996,8 @@
             document.querySelectorAll('.guide-nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('guide-' + id).classList.add('active');
             event.target.classList.add('active');
-            document.querySelector('.guide-content').scrollTop = 0;
         }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeGuide();
-        });
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeGuide(); });
     </script>
 
 </body>
