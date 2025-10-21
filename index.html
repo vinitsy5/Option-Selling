@@ -512,6 +512,134 @@
         .greek-name { font-size: 0.9em; color: #666; margin-bottom: 5px; }
         .greek-value { font-size: 1.8em; font-weight: 700; color: #333; }
     
+/* ========== MOBILE RESPONSIVE STYLES ========== */
+
+/* Tablets and smaller (below 1024px) */
+@media (max-width: 1024px) {
+    .container {
+        margin: 10px;
+        border-radius: 10px;
+    }
+    .header h1 { font-size: 2em; }
+    .step-content { padding: 20px; }
+    .input-grid,
+    .suggestion-grid,
+    .metrics-grid,
+    .positions-panel,
+    .greeks-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+    .guide-content {
+        padding: 30px 20px;
+        margin: 20px 10px;
+    }
+}
+
+/* Mobile phones (below 768px) */
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    .container { border-radius: 8px; }
+    .header { padding: 20px 15px; }
+    .header h1 { font-size: 1.5em; }
+    .header p { font-size: 0.9em; }
+    .badge { font-size: 0.8em; padding: 6px 15px; }
+    .section-title { font-size: 1.4em; }
+    .step-content { padding: 15px; min-height: auto; }
+    .input-field { font-size: 16px; }
+    .btn { padding: 12px 20px; font-size: 1em; width: 100%; }
+    .btn-group { flex-direction: column; }
+    .suggestion-grid { grid-template-columns: 1fr; }
+    .suggestion-card { padding: 15px; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .metric-card { padding: 15px; }
+    .metric-value { font-size: 1.5em; }
+    .chart-container { padding: 15px; }
+    .slider-panel { padding: 20px 15px; }
+    .slider-label-text { font-size: 1em; }
+    .slider-value { font-size: 1.2em; padding: 3px 15px; }
+    .positions-panel { grid-template-columns: 1fr; }
+    .position-card { padding: 20px 15px; }
+    .guide-btn {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 1.8em;
+    }
+    .guide-modal { padding: 0; }
+    .guide-content {
+        margin: 0;
+        border-radius: 0;
+        max-width: 100%;
+        min-height: 100vh;
+    }
+    .guide-close { font-size: 2.5em; top: 10px; right: 15px; }
+    .guide-main-title { font-size: 2em; }
+    .guide-subtitle { font-size: 1em; }
+    .guide-nav { flex-direction: column; gap: 10px; }
+    .guide-nav-btn { width: 100%; text-align: center; }
+    .guide-chapter-title { font-size: 1.5em; }
+    .guide-subsection-title { font-size: 1.2em; }
+    .guide-table { font-size: 0.9em; }
+    .guide-table th,
+    .guide-table td { padding: 10px 8px; }
+}
+
+/* Small phones (below 480px) */
+@media (max-width: 480px) {
+    .header h1 { font-size: 1.3em; }
+    .section-title { font-size: 1.2em; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .suggestion-value { font-size: 1.1em; }
+    .metric-value { font-size: 1.3em; }
+    .guide-main-title { font-size: 1.5em; }
+    .guide-chapter-title { font-size: 1.3em; }
+    .guide-text,
+    .guide-list li { font-size: 1em; }
+}
+
+/* Landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+    .guide-btn {
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5em;
+    }
+}
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    .add-btn,
+    .remove-btn,
+    .edit-btn,
+    .suggestion-card,
+    .strategy-card {
+        min-height: 44px;
+    }
+    .btn:active,
+    .suggestion-card:active,
+    .strategy-card:active {
+        opacity: 0.7;
+    }
+}
+
+/* Table scroll */
+.guide-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+}
+.guide-table-container::-webkit-scrollbar { height: 8px; }
+.guide-table-container::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+
         /* Guide styles */
         .guide-btn {
             position: fixed;
@@ -561,20 +689,18 @@
             cursor: pointer;
             color: #666;
         }
+        .guide-header { text-align: center; margin-bottom: 30px; }
         .guide-main-title {
             font-size: 3em;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
-            text-align: center;
             margin-bottom: 10px;
         }
         .guide-subtitle {
-            text-align: center;
             font-size: 1.3em;
             color: #666;
-            margin-bottom: 30px;
         }
         .guide-nav {
             display: flex;
@@ -1452,8 +1578,8 @@
         }
     </script>
 
-    <!-- BILLION DOLLAR OPTIONS UNIVERSITY GUIDE -->
-    <button class="guide-btn" onclick="openGuide()" title="Open Options University">📚</button>
+    <!-- BILLION DOLLAR GUIDE -->
+    <button class="guide-btn" onclick="openGuide()" title="Options University">📚</button>
 
     <div class="guide-modal" id="guideModal">
         <div class="guide-content">
@@ -1461,1194 +1587,234 @@
 
             <div class="guide-header">
                 <div class="guide-main-title">📚 OPTIONS UNIVERSITY 🎓</div>
-                <div class="guide-subtitle">Complete Billion-Dollar Guide to Options & Calendar Spreads</div>
+                <div class="guide-subtitle">Complete Guide to Options & Calendar Spreads</div>
             </div>
 
             <div class="guide-nav">
-                <button class="guide-nav-btn active" onclick="showGuideSection('basics')">Options Basics</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('greeks')">The Greeks</button>
+                <button class="guide-nav-btn active" onclick="showGuideSection('basics')">Basics</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('greeks')">Greeks</button>
                 <button class="guide-nav-btn" onclick="showGuideSection('delta-dte')">Delta & DTE</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('strategies')">All Strategies</button>
-                <button class="guide-nav-btn" onclick="showGuideSection('calendar')">Calendar Spreads</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('strategies')">Strategies</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('calendar')">Calendars</button>
                 <button class="guide-nav-btn" onclick="showGuideSection('advanced')">Advanced</button>
             </div>
 
-            <!-- SECTION 1: BASICS -->
             <div class="guide-section active" id="guide-basics">
                 <div class="guide-chapter">
                     <h2 class="guide-chapter-title">Chapter 1: Options Fundamentals</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">What is an Option?</h3>
-                        <p class="guide-text">
-                            An option is a <strong>contract</strong> that gives you the <strong>right (but not obligation)</strong> 
-                            to buy or sell an underlying asset at a predetermined price (strike) before or at expiration.
-                        </p>
+                        <h3 class="guide-subsection-title">CALL vs PUT Options</h3>
+                        <div class="guide-table-container">
+                        <table class="guide-table">
+                            <tr><th>Aspect</th><th>CALL</th><th>PUT</th></tr>
+                            <tr><td>Right to</td><td>BUY asset</td><td>SELL asset</td></tr>
+                            <tr><td>When buy</td><td>BULLISH (expect ↑)</td><td>BEARISH (expect ↓)</td></tr>
+                            <tr><td>Profit if</td><td>Price > Strike</td><td>Price < Strike</td></tr>
+                            <tr><td>Max profit</td><td>Unlimited (buying)</td><td>Strike - Premium</td></tr>
+                        </table>
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">ITM / ATM / OTM</h3>
+                        <div class="guide-table-container">
+                        <table class="guide-table">
+                            <tr><th>Type</th><th>Delta</th><th>Description</th></tr>
+                            <tr><td><strong>ITM</strong></td><td>0.50-1.00</td><td>Has intrinsic value, expensive</td></tr>
+                            <tr><td><strong>ATM</strong></td><td>~0.50</td><td>Strike = Spot, BEST for calendars!</td></tr>
+                            <tr><td><strong>OTM</strong></td><td>0.00-0.50</td><td>No intrinsic value, cheaper</td></tr>
+                        </table>
+                        </div>
                         <div class="guide-highlight">
-                            <strong>🔑 Key Point:</strong> Options are WASTING ASSETS - they lose value over time (time decay). 
-                            Unlike stocks, if you do nothing, options expire worthless!
-                        </div>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">CALL vs PUT Options - Complete Comparison</h3>
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Aspect</th>
-                                    <th>CALL Option</th>
-                                    <th>PUT Option</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Right to</strong></td>
-                                    <td>BUY the underlying asset</td>
-                                    <td>SELL the underlying asset</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>When you buy</strong></td>
-                                    <td>BULLISH (expect price ↑)</td>
-                                    <td>BEARISH (expect price ↓)</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>When you sell</strong></td>
-                                    <td>BEARISH or neutral</td>
-                                    <td>BULLISH or neutral</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Profit if</strong></td>
-                                    <td>Price goes ABOVE strike</td>
-                                    <td>Price goes BELOW strike</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Max profit (buying)</strong></td>
-                                    <td>Unlimited</td>
-                                    <td>Strike - Premium</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Max loss (buying)</strong></td>
-                                    <td>Premium paid</td>
-                                    <td>Premium paid</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Max profit (selling)</strong></td>
-                                    <td>Premium received</td>
-                                    <td>Premium received</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Max loss (selling)</strong></td>
-                                    <td>Unlimited (naked)</td>
-                                    <td>Strike - Premium</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Strike Price & Moneyness (ITM/ATM/OTM)</h3>
-                        <p class="guide-text">The <strong>strike price</strong> determines when your option has value. Understanding moneyness is CRITICAL!</p>
-
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Moneyness</th>
-                                    <th>CALL Options</th>
-                                    <th>PUT Options</th>
-                                    <th>Delta Range</th>
-                                    <th>Characteristics</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>ITM<br>(In-The-Money)</strong></td>
-                                    <td>Strike < Current Price<br><em>Ex: BTC ₹70k, Strike ₹65k</em></td>
-                                    <td>Strike > Current Price<br><em>Ex: BTC ₹70k, Strike ₹75k</em></td>
-                                    <td>0.50 to 1.00</td>
-                                    <td>• Has intrinsic value<br>• More expensive<br>• Moves more with underlying<br>• Lower time value</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>ATM<br>(At-The-Money)</strong></td>
-                                    <td colspan="2" style="text-align:center;">Strike ≈ Current Price<br><em>Ex: BTC ₹70k, Strike ₹70k</em></td>
-                                    <td>~0.50</td>
-                                    <td>• 50/50 profit chance<br>• <strong>HIGHEST time value</strong><br>• Most liquid<br>• <strong>BEST for spreads!</strong></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>OTM<br>(Out-The-Money)</strong></td>
-                                    <td>Strike > Current Price<br><em>Ex: BTC ₹70k, Strike ₹75k</em></td>
-                                    <td>Strike < Current Price<br><em>Ex: BTC ₹70k, Strike ₹65k</em></td>
-                                    <td>0.00 to 0.50</td>
-                                    <td>• No intrinsic value<br>• Cheaper<br>• "Lottery ticket"<br>• Often expires worthless</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="guide-example">
-                            <strong>📊 Real Example:</strong><br><br>
-                            <strong>Spot Price:</strong> BTC at ₹70,000<br><br>
-
-                            <strong>₹65,000 CALL (ITM):</strong><br>
-                            • Already ₹5,000 in profit if exercised<br>
-                            • Premium: ₹6,500 (₹5k intrinsic + ₹1.5k time value)<br>
-                            • Delta: ~0.75 (moves ₹75 for every ₹100 BTC moves)<br><br>
-
-                            <strong>₹70,000 CALL (ATM):</strong><br>
-                            • No intrinsic value yet<br>
-                            • Premium: ₹2,500 (all time value!)<br>
-                            • Delta: ~0.50 (50% chance of profit)<br>
-                            • <strong>→ BEST for calendar spreads!</strong><br><br>
-
-                            <strong>₹75,000 CALL (OTM):</strong><br>
-                            • Needs BTC to go up ₹5,000<br>
-                            • Premium: ₹800 (all time value, small)<br>
-                            • Delta: ~0.25 (25% chance of profit)<br>
-                            • Cheap but risky!
-                        </div>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Option Premium Components</h3>
-
-                        <div class="guide-formula">
-                            <strong>THE FUNDAMENTAL FORMULA:</strong><br><br>
-                            Option Premium = Intrinsic Value + Time Value
-                        </div>
-
-                        <p class="guide-text"><strong>1️⃣ Intrinsic Value</strong> - The "real" value if exercised NOW</p>
-                        <ul class="guide-list">
-                            <li><strong>CALL:</strong> Max(0, Current Price - Strike)</li>
-                            <li><strong>PUT:</strong> Max(0, Strike - Current Price)</li>
-                            <li>OTM options have ZERO intrinsic value</li>
-                            <li>This part never decays (moves 1:1 with underlying)</li>
-                        </ul>
-
-                        <p class="guide-text"><strong>2️⃣ Time Value</strong> - The "hope" premium for future profit</p>
-                        <ul class="guide-list">
-                            <li>Reflects probability of becoming profitable</li>
-                            <li><strong>DECAYS TO ZERO at expiration</strong> (theta decay)</li>
-                            <li>Highest for ATM options (maximum uncertainty)</li>
-                            <li>Affected by: Time remaining, volatility, interest rates</li>
-                            <li><strong>This is what you're trading in calendar spreads!</strong></li>
-                        </ul>
-
-                        <div class="guide-example">
-                            <strong>💰 Premium Breakdown Example:</strong><br><br>
-                            <strong>Scenario:</strong> BTC at ₹70,000, 7 days to expiry<br><br>
-
-                            <strong>₹70k CALL (ATM):</strong><br>
-                            Premium: ₹2,500<br>
-                            Intrinsic: ₹0 (ATM has no intrinsic value)<br>
-                            Time Value: ₹2,500 (100% is time value!)<br>
-                            → <em>This ₹2,500 will decay to ₹0 in 7 days if price doesn't move!</em><br><br>
-
-                            <strong>₹65k CALL (ITM):</strong><br>
-                            Premium: ₹6,000<br>
-                            Intrinsic: ₹5,000 (70k - 65k)<br>
-                            Time Value: ₹1,000<br>
-                            → <em>Only ₹1,000 decays, ₹5,000 stays as long as BTC > ₹65k</em><br><br>
-
-                            <strong>₹75k CALL (OTM):</strong><br>
-                            Premium: ₹800<br>
-                            Intrinsic: ₹0<br>
-                            Time Value: ₹800 (100% time value)<br>
-                            → <em>Entire premium will likely decay to ₹0!</em>
+                            <strong>💡 Formula:</strong> Option Premium = Intrinsic Value + Time Value
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 2: GREEKS -->
             <div class="guide-section" id="guide-greeks">
                 <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 2: The Greeks - Your Risk Dashboard</h2>
+                    <h2 class="guide-chapter-title">Chapter 2: The Greeks</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">🔺 DELTA - Directional Risk & Probability</h3>
-
-                        <div class="guide-formula">
-                            <strong>Delta = Change in option price ÷ Change in underlying price</strong><br>
-                            Range: 0 to +1 for CALLs | 0 to -1 for PUTs
-                        </div>
-
-                        <p class="guide-text"><strong>What Delta Tells You:</strong></p>
-                        <ul class="guide-list">
-                            <li><strong>Directional Exposure:</strong> How much your option moves with the underlying</li>
-                            <li><strong>Probability:</strong> Delta ≈ probability of expiring ITM</li>
-                            <li><strong>Hedge Ratio:</strong> How many shares equivalent you're holding</li>
-                        </ul>
-
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Delta Value</th>
-                                    <th>Meaning (CALL)</th>
-                                    <th>Probability ITM</th>
-                                    <th>Price Sensitivity</th>
-                                    <th>Use Case</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>0.90 - 1.00</strong></td>
-                                    <td>Deep ITM</td>
-                                    <td>~90-100%</td>
-                                    <td>Moves almost 1:1 with stock</td>
-                                    <td>Stock replacement</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>0.70 - 0.80</strong></td>
-                                    <td>Moderately ITM</td>
-                                    <td>~70-80%</td>
-                                    <td>₹70-80 per ₹100 move</td>
-                                    <td>Directional trades</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>~0.50</strong></td>
-                                    <td>ATM</td>
-                                    <td>~50%</td>
-                                    <td>₹50 per ₹100 move</td>
-                                    <td><strong>Calendar spreads!</strong></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>0.30 - 0.40</strong></td>
-                                    <td>Slightly OTM</td>
-                                    <td>~30-40%</td>
-                                    <td>₹30-40 per ₹100 move</td>
-                                    <td>Credit spreads</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>0.10 - 0.20</strong></td>
-                                    <td>Far OTM</td>
-                                    <td>~10-20%</td>
-                                    <td>₹10-20 per ₹100 move</td>
-                                    <td>Lottery tickets</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>< 0.10</strong></td>
-                                    <td>Very far OTM</td>
-                                    <td>< 10%</td>
-                                    <td>Barely moves</td>
-                                    <td>Usually worthless</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
+                        <h3 class="guide-subsection-title">🔺 DELTA - Direction & Probability</h3>
+                        <p class="guide-text">Delta = Change in option price ÷ Change in underlying</p>
                         <div class="guide-example">
-                            <strong>📈 Delta in Action:</strong><br><br>
-
-                            <strong>Scenario:</strong> BTC at ₹70,000<br>
-                            You buy ₹70k CALL with Delta 0.50<br>
-                            Premium paid: ₹2,500<br><br>
-
-                            <strong>BTC moves to ₹71,000 (+₹1,000):</strong><br>
-                            Your option should gain: ₹1,000 × 0.50 = ₹500<br>
-                            New premium: ~₹3,000<br>
-                            Your profit: ₹500 (20% gain!)<br><br>
-
-                            <strong>BTC moves to ₹69,000 (-₹1,000):</strong><br>
-                            Your option loses: ₹1,000 × 0.50 = ₹500<br>
-                            New premium: ~₹2,000<br>
-                            Your loss: ₹500 (20% loss)
-                        </div>
-
-                        <div class="guide-highlight">
-                            <strong>🎯 Calendar Spread Delta Strategy:</strong><br>
-                            • Short leg: Delta ~0.50 (ATM)<br>
-                            • Long leg: Delta ~0.50 (ATM)<br>
-                            • <strong>Net Delta: ~0.00 (market neutral!)</strong><br>
-                            • You don't care about direction, just time decay difference!
+                            <strong>Example:</strong> Delta 0.50 means if BTC moves ₹100, option moves ₹50<br>
+                            <strong>Also:</strong> Delta 0.50 = ~50% probability of expiring ITM
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">⏰ THETA - Time Decay (The Calendar Spread's Best Friend)</h3>
-
-                        <div class="guide-formula">
-                            <strong>Theta = Change in option price per day passing</strong><br>
-                            Negative for buyers | Positive for sellers
-                        </div>
-
-                        <p class="guide-text"><strong>The Harsh Reality of Theta:</strong></p>
-                        <ul class="guide-list">
-                            <li>Every day that passes, your option loses value (if you bought it)</li>
-                            <li>Decay is <strong>NON-LINEAR</strong> - accelerates as expiration approaches</li>
-                            <li>ATM options have the HIGHEST theta (most time value to lose)</li>
-                            <li>Weekends count as 2-3 days of decay!</li>
-                        </ul>
-
+                        <h3 class="guide-subsection-title">⏰ THETA - Time Decay</h3>
+                        <div class="guide-table-container">
                         <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Days to Expiry</th>
-                                    <th>Daily Decay Rate</th>
-                                    <th>Weekly Loss</th>
-                                    <th>Example (₹2000 option)</th>
-                                    <th>Strategy</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>60+ DTE</strong></td>
-                                    <td>~1-2% per day</td>
-                                    <td>~7-14%</td>
-                                    <td>Loses ₹20-40/day</td>
-                                    <td>Buy for calendars</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>30-60 DTE</strong></td>
-                                    <td>~2-3% per day</td>
-                                    <td>~14-21%</td>
-                                    <td>Loses ₹40-60/day</td>
-                                    <td>Swing trades</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>15-30 DTE</strong></td>
-                                    <td>~3-5% per day</td>
-                                    <td>~21-35%</td>
-                                    <td>Loses ₹60-100/day</td>
-                                    <td>Calendar LONG leg</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>7-15 DTE</strong></td>
-                                    <td>~5-10% per day</td>
-                                    <td>~35-70%</td>
-                                    <td>Loses ₹100-200/day</td>
-                                    <td>Credit spreads</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3-7 DTE</strong></td>
-                                    <td>~10-20% per day</td>
-                                    <td>~70-100%+</td>
-                                    <td>Loses ₹200-400/day</td>
-                                    <td><strong>Calendar SHORT leg!</strong></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>0-3 DTE</strong></td>
-                                    <td>~30-50% per day</td>
-                                    <td>Expires!</td>
-                                    <td>Loses ₹600-1000/day</td>
-                                    <td>0DTE scalping only</td>
-                                </tr>
-                            </tbody>
+                            <tr><th>DTE</th><th>Decay Rate</th><th>Strategy</th></tr>
+                            <tr><td>60+ DTE</td><td>~2%/day</td><td>Buy for calendars</td></tr>
+                            <tr><td>7-15 DTE</td><td>~10-15%/day</td><td>Calendar LONG leg</td></tr>
+                            <tr><td>0-7 DTE</td><td>~30-50%/day</td><td>Calendar SHORT leg!</td></tr>
                         </table>
-
-                        <div class="guide-example">
-                            <strong>⏳ Time Decay Pattern (ATM ₹2,000 option):</strong><br><br>
-
-                            <strong>30 DTE:</strong> ₹2,000 (100%)<br>
-                            <strong>23 DTE:</strong> ₹1,850 (92.5%) - Lost 7.5% in 1 week<br>
-                            <strong>16 DTE:</strong> ₹1,650 (82.5%) - Lost 10% more<br>
-                            <strong>9 DTE:</strong> ₹1,350 (67.5%) - Lost 15% more!<br>
-                            <strong>5 DTE:</strong> ₹900 (45%) - Lost 22.5% more!!<br>
-                            <strong>2 DTE:</strong> ₹400 (20%) - Lost 25% more!!!<br>
-                            <strong>0 DTE:</strong> ₹0 (0%) - Everything gone!<br><br>
-
-                            <strong>🔥 Last 7 days = 47.5% of total value lost!</strong><br>
-                            <strong>🔥 Last 2 days = 25% of remaining value lost!</strong>
                         </div>
-
                         <div class="guide-highlight">
-                            <strong>💰 THE CALENDAR SPREAD THETA EDGE:</strong><br><br>
-                            <strong>Setup:</strong><br>
-                            • SHORT 3 DTE option: Theta = -₹300/day (loses fast!)<br>
-                            • LONG 14 DTE option: Theta = -₹80/day (loses slow)<br>
-                            • <strong>Net Theta: +₹220/day profit from decay difference!</strong><br><br>
-
-                            <strong>Why it works:</strong><br>
-                            • You collect ₹300/day from short option decay<br>
-                            • You lose only ₹80/day from long option decay<br>
-                            • <strong>Net: ₹220/day profit if price stays near strike!</strong><br>
-                            • This is your EDGE in calendar spreads!
+                            <strong>🔥 Last 7 days = 30-50% of premium lost!</strong>
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">📊 VEGA - Volatility Sensitivity</h3>
-
-                        <div class="guide-formula">
-                            <strong>Vega = Change in option price per 1% change in IV</strong><br>
-                            Always positive (higher IV = higher premium)
-                        </div>
-
-                        <p class="guide-text"><strong>Understanding IV (Implied Volatility):</strong></p>
-                        <ul class="guide-list">
-                            <li>IV = Market's expectation of future price volatility</li>
-                            <li>High IV = Market expects big moves = Options expensive</li>
-                            <li>Low IV = Market expects calm = Options cheap</li>
-                            <li>IV can change instantly on news/events</li>
-                        </ul>
-
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>IV Change</th>
-                                    <th>Effect on Premium</th>
-                                    <th>Winner</th>
-                                    <th>Loser</th>
-                                    <th>Example</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>IV +10%</strong></td>
-                                    <td>Premium increases</td>
-                                    <td>Option buyers<br>Long vega</td>
-                                    <td>Option sellers<br>Short vega</td>
-                                    <td>Earnings announcement coming</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>IV -10%</strong></td>
-                                    <td>Premium decreases</td>
-                                    <td>Option sellers<br>Short vega</td>
-                                    <td>Option buyers<br>Long vega</td>
-                                    <td>"IV crush" after earnings</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="guide-example">
-                            <strong>💥 Vega Example - The IV Crush:</strong><br><br>
-
-                            <strong>Before Earnings:</strong><br>
-                            BTC at ₹70,000<br>
-                            ₹70k CALL, 7 DTE<br>
-                            IV: 80% (high - market expects volatility)<br>
-                            Vega: 30<br>
-                            Premium: ₹3,000<br><br>
-
-                            <strong>After Earnings (price unchanged):</strong><br>
-                            BTC still at ₹70,000<br>
-                            IV: 40% (dropped 40%!)<br>
-                            Premium loss from IV: 40% × 30 = ₹1,200 loss!<br>
-                            New Premium: ~₹1,800<br><br>
-
-                            <strong>Result: Lost 40% even though price didn't move!</strong><br>
-                            This is "IV crush" - kills option buyers after events!
-                        </div>
-
-                        <div class="guide-highlight">
-                            <strong>📈 Calendar Spread Vega Profile:</strong><br><br>
-                            <strong>Short-term options:</strong> Low vega (less time for volatility to matter)<br>
-                            <strong>Long-term options:</strong> High vega (more time = volatility matters more)<br><br>
-
-                            <strong>Net Result: Calendar spreads are LONG VEGA</strong><br>
-                            • You PROFIT if IV increases<br>
-                            • You LOSE if IV decreases sharply<br><br>
-
-                            <strong>Best Practice:</strong><br>
-                            • Enter when IV is LOW (cheap to buy)<br>
-                            • Exit when IV SPIKES (expensive to close)<br>
-                            • Avoid trading right after earnings (IV crush risk)
-                        </div>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">🔄 GAMMA - Rate of Delta Change</h3>
-
-                        <div class="guide-formula">
-                            <strong>Gamma = Change in Delta per ₹1 change in underlying</strong><br>
-                            Highest for ATM options near expiry
-                        </div>
-
-                        <p class="guide-text"><strong>Why Gamma Matters:</strong></p>
-                        <ul class="guide-list">
-                            <li>Shows how FAST your delta changes</li>
-                            <li>High gamma = Delta changes rapidly (risky for sellers!)</li>
-                            <li>Low gamma = Delta stays stable (safer)</li>
-                            <li>ATM options on expiry day have EXTREME gamma</li>
-                        </ul>
-
-                        <div class="guide-example">
-                            <strong>🎢 Gamma Risk - The Expiry Day Nightmare:</strong><br><br>
-
-                            <strong>You sold ATM 70k CALL on expiry day (0 DTE)</strong><br>
-                            BTC at ₹70,000<br>
-                            Premium collected: ₹500<br>
-                            Current Delta: 0.50<br>
-                            <strong>Gamma: 0.15 (VERY HIGH!)</strong><br><br>
-
-                            <strong>BTC moves to ₹70,500 (+₹500):</strong><br>
-                            New Delta: 0.50 + (0.15 × 0.5) = 0.575<br>
-                            Loss so far: ~₹288<br><br>
-
-                            <strong>BTC continues to ₹71,000 (+₹500 more):</strong><br>
-                            New Delta: 0.575 + (0.15 × 0.5) = 0.65<br>
-                            Additional loss: ~₹325<br>
-                            <strong>Total loss: ₹613 (you only collected ₹500!)</strong><br><br>
-
-                            <strong>BTC reaches ₹71,500 (+₹500 more):</strong><br>
-                            Delta now ~0.80 (accelerating!)<br>
-                            Loss keeps growing faster!<br><br>
-
-                            <strong>This is GAMMA RISK - losses accelerate!</strong>
-                        </div>
-
-                        <div class="guide-highlight">
-                            <strong>Calendar Spread Gamma:</strong><br>
-                            • Short leg: High gamma (scary near expiry!)<br>
-                            • Long leg: Low gamma (stable)<br>
-                            • <strong>Risk: If price moves away, short gamma hurts more than long gamma helps</strong><br>
-                            • This is why you EXIT if price moves >7% away from strike!
-                        </div>
+                        <h3 class="guide-subsection-title">📊 VEGA - Volatility</h3>
+                        <p class="guide-text">Vega = Change per 1% IV change. Calendar spreads are LONG VEGA (profit from IV increase)</p>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 3: DELTA & DTE -->
             <div class="guide-section" id="guide-delta-dte">
                 <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 3: Delta & DTE - The Complete Connection</h2>
+                    <h2 class="guide-chapter-title">Chapter 3: Delta & DTE Connection</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">How DTE Affects Premium Decay - The Complete Table</h3>
-
+                        <h3 class="guide-subsection-title">Premium Decay by DTE</h3>
+                        <div class="guide-table-container">
                         <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Days to Expiry</th>
-                                    <th>Daily Decay %</th>
-                                    <th>ATM Theta</th>
-                                    <th>Behavior</th>
-                                    <th>Best Strategy</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>90+ DTE</strong></td>
-                                    <td>0.5-1%</td>
-                                    <td>Very low</td>
-                                    <td>Stable, mostly intrinsic value</td>
-                                    <td>LEAPS, long-term holds</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>60-90 DTE</strong></td>
-                                    <td>1-2%</td>
-                                    <td>Low</td>
-                                    <td>Slow linear decay</td>
-                                    <td>Buy for deep calendar spreads</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>30-60 DTE</strong></td>
-                                    <td>2-4%</td>
-                                    <td>Moderate</td>
-                                    <td>Steady decay begins</td>
-                                    <td>Swing trading</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>21-30 DTE</strong></td>
-                                    <td>4-6%</td>
-                                    <td>Accelerating</td>
-                                    <td>Decay curve steepens</td>
-                                    <td>Calendar LONG leg</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>14-21 DTE</strong></td>
-                                    <td>6-8%</td>
-                                    <td>Fast</td>
-                                    <td>Rapid time value erosion</td>
-                                    <td><strong>Calendar LONG leg sweet spot</strong></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>7-14 DTE</strong></td>
-                                    <td>8-12%</td>
-                                    <td>Very fast</td>
-                                    <td>Exponential acceleration</td>
-                                    <td>Premium selling strategies</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>5-7 DTE</strong></td>
-                                    <td>12-18%</td>
-                                    <td>Extreme</td>
-                                    <td>Loses 30-40% of value this week</td>
-                                    <td><strong>Calendar SHORT leg ideal!</strong></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3-5 DTE</strong></td>
-                                    <td>18-25%</td>
-                                    <td>Critical</td>
-                                    <td>Binary outcomes emerging</td>
-                                    <td>0DTE setup</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>1-3 DTE</strong></td>
-                                    <td>25-40%</td>
-                                    <td>Catastrophic</td>
-                                    <td>OTM options dying fast</td>
-                                    <td>Day trading only</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>0-1 DTE</strong></td>
-                                    <td>40-70%</td>
-                                    <td>Total</td>
-                                    <td>Worthless if OTM at close</td>
-                                    <td>Scalping, avoid holding</td>
-                                </tr>
-                            </tbody>
+                            <tr><th>Days</th><th>Daily Decay</th><th>Use</th></tr>
+                            <tr><td>60+ DTE</td><td>1-2%</td><td>LEAPS</td></tr>
+                            <tr><td>14-21 DTE</td><td>6-8%</td><td><strong>Calendar LONG</strong></td></tr>
+                            <tr><td>3-7 DTE</td><td>12-18%</td><td><strong>Calendar SHORT</strong></td></tr>
+                            <tr><td>0-3 DTE</td><td>30-50%</td><td>0DTE only</td></tr>
                         </table>
-
+                        </div>
                         <div class="guide-highlight">
-                            <strong>🎯 THE CALENDAR SPREAD SWEET SPOT:</strong><br><br>
-                            <strong>SHORT Leg:</strong> 3-7 DTE (12-18% daily decay)<br>
-                            <strong>LONG Leg:</strong> 14-21 DTE (6-8% daily decay)<br>
-                            <strong>Decay Difference:</strong> 6-10% per day = YOUR PROFIT!<br><br>
-                            This spread captures maximum theta differential while maintaining reasonable risk!
-                        </div>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Delta Evolution Over Time - Same Strike, Different DTE</h3>
-
-                        <div class="guide-example">
-                            <strong>📉 Watching Delta Die (OTM Option):</strong><br><br>
-
-                            <strong>Setup:</strong> BTC ₹70k CALL, Current Price: ₹69,000 (slightly OTM)<br><br>
-
-                            <strong>60 DTE:</strong><br>
-                            Delta: 0.45<br>
-                            Premium: ₹2,800<br>
-                            <em>Still has hope! Time for price to catch up</em><br><br>
-
-                            <strong>45 DTE:</strong><br>
-                            Delta: 0.42<br>
-                            Premium: ₹2,200<br>
-                            <em>Losing confidence slowly</em><br><br>
-
-                            <strong>30 DTE:</strong><br>
-                            Delta: 0.38<br>
-                            Premium: ₹1,600<br>
-                            <em>Hope fading</em><br><br>
-
-                            <strong>21 DTE:</strong><br>
-                            Delta: 0.33<br>
-                            Premium: ₹1,100<br>
-                            <em>Decay accelerating</em><br><br>
-
-                            <strong>14 DTE:</strong><br>
-                            Delta: 0.28<br>
-                            Premium: ₹700<br>
-                            <em>Getting desperate</em><br><br>
-
-                            <strong>7 DTE:</strong><br>
-                            Delta: 0.20<br>
-                            Premium: ₹350<br>
-                            <em>Almost dead</em><br><br>
-
-                            <strong>3 DTE:</strong><br>
-                            Delta: 0.10<br>
-                            Premium: ₹100<br>
-                            <em>Last breath</em><br><br>
-
-                            <strong>1 DTE:</strong><br>
-                            Delta: 0.03<br>
-                            Premium: ₹20<br>
-                            <em>RIP 💀</em><br><br>
-
-                            <strong>0 DTE:</strong><br>
-                            Delta: 0.00<br>
-                            Premium: ₹0<br>
-                            <em>Gone forever</em><br><br>
-
-                            <strong>Same strike, but delta collapsed from 0.45 to 0.00 as time ran out!</strong>
-                        </div>
-
-                        <div class="guide-example">
-                            <strong>📈 Delta Stability (ITM Option):</strong><br><br>
-
-                            <strong>Setup:</strong> BTC ₹65k CALL, Current Price: ₹70,000 (deep ITM)<br><br>
-
-                            <strong>60 DTE:</strong> Delta: 0.85<br>
-                            <strong>30 DTE:</strong> Delta: 0.88<br>
-                            <strong>14 DTE:</strong> Delta: 0.92<br>
-                            <strong>7 DTE:</strong> Delta: 0.95<br>
-                            <strong>1 DTE:</strong> Delta: 0.99<br>
-                            <strong>0 DTE:</strong> Delta: 1.00<br><br>
-
-                            <strong>ITM options maintain high delta because they have intrinsic value!</strong>
+                            <strong>🎯 Sweet Spot:</strong> SHORT 3-7 DTE + LONG 14-21 DTE = Max theta edge!
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Continue with remaining chapters... -->
-            <!-- Due to length, including the key remaining content -->
-
-            <!-- SECTION 4: STRATEGIES -->
             <div class="guide-section" id="guide-strategies">
                 <div class="guide-chapter">
-                    <h2 class="guide-chapter-title">Chapter 4: Complete Options Strategies</h2>
+                    <h2 class="guide-chapter-title">Chapter 4: All Strategies</h2>
 
-                    <p class="guide-text">Here are ALL major options strategies categorized by use case. Master calendar spreads first, then explore others!</p>
-
-                    <table class="guide-table">
-                        <thead>
-                            <tr>
-                                <th>Strategy</th>
-                                <th>Setup</th>
-                                <th>Market View</th>
-                                <th>Max Profit</th>
-                                <th>Max Loss</th>
-                                <th>Win Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Long Call</strong></td>
-                                <td>Buy CALL</td>
-                                <td>Bullish</td>
-                                <td>Unlimited</td>
-                                <td>Premium paid</td>
-                                <td>30-40%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Long Put</strong></td>
-                                <td>Buy PUT</td>
-                                <td>Bearish</td>
-                                <td>Strike - Premium</td>
-                                <td>Premium paid</td>
-                                <td>30-40%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Covered Call</strong></td>
-                                <td>Own stock + Sell CALL</td>
-                                <td>Neutral-Bullish</td>
-                                <td>Premium + limited upside</td>
-                                <td>Stock downside</td>
-                                <td>60-70%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Cash-Secured Put</strong></td>
-                                <td>Sell PUT + Hold cash</td>
-                                <td>Neutral-Bullish</td>
-                                <td>Premium received</td>
-                                <td>Strike - Premium</td>
-                                <td>60-70%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Bull Call Spread</strong></td>
-                                <td>Buy lower CALL + Sell higher CALL</td>
-                                <td>Moderately Bullish</td>
-                                <td>Spread width - Debit</td>
-                                <td>Net debit paid</td>
-                                <td>45-55%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Bear Put Spread</strong></td>
-                                <td>Buy higher PUT + Sell lower PUT</td>
-                                <td>Moderately Bearish</td>
-                                <td>Spread width - Debit</td>
-                                <td>Net debit paid</td>
-                                <td>45-55%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Iron Condor</strong></td>
-                                <td>Sell OTM Call Spread + Sell OTM Put Spread</td>
-                                <td>Neutral (Range)</td>
-                                <td>Net credit received</td>
-                                <td>Spread width - Credit</td>
-                                <td>65-75%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Butterfly</strong></td>
-                                <td>Buy 1 ITM + Sell 2 ATM + Buy 1 OTM</td>
-                                <td>Neutral (pinned)</td>
-                                <td>At middle strike</td>
-                                <td>Net debit paid</td>
-                                <td>40-50%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Straddle</strong></td>
-                                <td>Buy ATM CALL + ATM PUT</td>
-                                <td>Volatility (big move)</td>
-                                <td>Unlimited</td>
-                                <td>Both premiums</td>
-                                <td>30-40%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Strangle</strong></td>
-                                <td>Buy OTM CALL + OTM PUT</td>
-                                <td>Volatility (bigger move)</td>
-                                <td>Unlimited</td>
-                                <td>Both premiums</td>
-                                <td>25-35%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Calendar Spread</strong></td>
-                                <td>Sell near-term + Buy far-term (same strike)</td>
-                                <td>Neutral (time decay)</td>
-                                <td>When short expires worthless</td>
-                                <td>Net debit paid</td>
-                                <td>55-65%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>DOUBLE Calendar</strong></td>
-                                <td>Sell short PUT+CALL + Buy long PUT+CALL</td>
-                                <td>Neutral (range)</td>
-                                <td>Max theta differential</td>
-                                <td>Net debit paid</td>
-                                <td><strong>65-75%</strong> ⭐</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="guide-highlight">
-                        <strong>🏆 Why Calendar Spreads Are Great for Beginners:</strong><br>
-                        • Defined risk (can't lose more than net debit)<br>
-                        • High win rate (60-70% for double calendars)<br>
-                        • Not directional (don't need to predict direction)<br>
-                        • Profit from time decay (theta is your friend)<br>
-                        • Forgiving (profit zone is ±5-7%)<br>
-                        • Easy to manage (clear exit rules)
+                    <div class="guide-subsection">
+                        <div class="guide-table-container">
+                        <table class="guide-table">
+                            <tr><th>Strategy</th><th>View</th><th>Win Rate</th></tr>
+                            <tr><td>Long Call/Put</td><td>Directional</td><td>30-40%</td></tr>
+                            <tr><td>Iron Condor</td><td>Neutral</td><td>65-75%</td></tr>
+                            <tr><td>Straddle</td><td>Volatility</td><td>30-40%</td></tr>
+                            <tr><td>Calendar Spread</td><td>Neutral</td><td>55-65%</td></tr>
+                            <tr><td><strong>DOUBLE Calendar</strong></td><td>Neutral</td><td><strong>65-75%</strong> ⭐</td></tr>
+                        </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 5: CALENDAR SPREADS -->
             <div class="guide-section" id="guide-calendar">
                 <div class="guide-chapter">
                     <h2 class="guide-chapter-title">Chapter 5: Calendar Spread Mastery</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">The Three Types of Calendar Spreads</h3>
-
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Setup</th>
-                                    <th>Best When</th>
-                                    <th>Win Rate</th>
-                                    <th>Profit Zone</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>PUT Calendar</strong></td>
-                                    <td>Sell short PUT<br>Buy long PUT<br>(same strike)</td>
-                                    <td>Neutral to slightly bearish<br>Expect consolidation</td>
-                                    <td>55-60%</td>
-                                    <td>±4-6%</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>CALL Calendar</strong></td>
-                                    <td>Sell short CALL<br>Buy long CALL<br>(same strike)</td>
-                                    <td>Neutral to slightly bullish<br>Expect consolidation</td>
-                                    <td>55-60%</td>
-                                    <td>±4-6%</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>DOUBLE Calendar</strong></td>
-                                    <td>Sell short PUT+CALL<br>Buy long PUT+CALL<br>(ATM strike)</td>
-                                    <td>Market neutral<br>Range-bound expected</td>
-                                    <td><strong>65-75%</strong> ⭐</td>
-                                    <td>±5-8%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">When to Trade Calendar Spreads - Complete Checklist</h3>
-
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Condition</th>
-                                    <th>Why It Matters</th>
-                                    <th>How to Check</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Low IV Environment</strong></td>
-                                    <td>Long-term options cheaper to buy</td>
-                                    <td>IV Rank < 50<br>IV Percentile < 50</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Expect IV Increase</strong></td>
-                                    <td>Long vega profits from IV rise</td>
-                                    <td>Before earnings, events, news</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Range-Bound Market</strong></td>
-                                    <td>Price stays near strike = max profit</td>
-                                    <td>Consolidation pattern, low ATR</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>5-7 Days to Short Expiry</strong></td>
-                                    <td>Maximum theta decay differential</td>
-                                    <td>Use weekly options on majors</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>High Liquidity</strong></td>
-                                    <td>Tight spreads, easy entry/exit</td>
-                                    <td>High volume, tight bid-ask</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Not Post-Earnings</strong></td>
-                                    <td>Avoid IV crush</td>
-                                    <td>Wait 3-5 days after earnings</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Strike Selection - THE MOST IMPORTANT DECISION</h3>
-
-                        <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Strike</th>
-                                    <th>Delta</th>
-                                    <th>Pros</th>
-                                    <th>Cons</th>
-                                    <th>When to Use</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>ATM<br>(At-The-Money)</strong></td>
-                                    <td>~0.50</td>
-                                    <td>• Max theta decay<br>• Highest profit potential<br>• Widest profit zone (±5-7%)<br>• Highest liquidity</td>
-                                    <td>• Most expensive<br>• Requires more capital</td>
-                                    <td><strong>DEFAULT CHOICE!</strong><br>Always use unless you have strong reason</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>2-3% OTM</strong></td>
-                                    <td>~0.35</td>
-                                    <td>• Cheaper than ATM<br>• Still good theta<br>• Directional bias allowed</td>
-                                    <td>• Narrower profit zone (±3-5%)<br>• Lower probability<br>• Less liquid</td>
-                                    <td>When you have slight directional view AND want cheaper entry</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>5% OTM</strong></td>
-                                    <td>~0.20</td>
-                                    <td>• Very cheap<br>• Can use larger size<br>• High R:R if correct</td>
-                                    <td>• Narrow profit zone (±2-3%)<br>• Low probability<br>• Need to be right on direction</td>
-                                    <td>Only if you have STRONG directional conviction</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>ITM<br>(In-The-Money)</strong></td>
-                                    <td>>0.50</td>
-                                    <td>• Protected if price moves toward ITM</td>
-                                    <td>• Very expensive<br>• Lower theta decay<br>• Capital intensive<br>• Not ideal for calendars</td>
-                                    <td>Rarely used - not recommended</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="guide-highlight">
-                            <strong>🎯 RULE OF THUMB:</strong><br>
-                            For calendar spreads, <strong>USE ATM STRIKE (Delta ~0.50) 95% of the time!</strong><br><br>
-
-                            Why?<br>
-                            • ATM has maximum time value = maximum theta decay<br>
-                            • Gives you ±5-7% profit zone (most forgiving)<br>
-                            • Highest liquidity = best fills<br>
-                            • Highest probability of success<br><br>
-
-                            <strong>Only deviate if you have STRONG directional conviction AND are willing to accept lower probability!</strong>
-                        </div>
-                    </div>
-
-                    <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Entry Rules - Your Checklist</h3>
-
+                        <h3 class="guide-subsection-title">Three Types</h3>
                         <ul class="guide-list">
-                            <li><strong>✅ IV Check:</strong> IV Rank or Percentile < 50 (low IV environment)</li>
-                            <li><strong>✅ Strike Selection:</strong> ATM (Delta ~0.50) for maximum edge</li>
-                            <li><strong>✅ DTE Selection:</strong> SHORT: 3-7 DTE | LONG: 14-21 DTE</li>
-                            <li><strong>✅ Cost/Risk:</strong> Target 40-60% ROI on net debit, risk max 2-3% of account</li>
-                            <li><strong>✅ Liquidity:</strong> High volume, tight bid-ask spread (< 5% of option price)</li>
-                            <li><strong>✅ Market Condition:</strong> Range-bound, consolidation, low trending</li>
-                            <li><strong>✅ No Events:</strong> Avoid entering right before earnings or major news</li>
+                            <li><strong>PUT Calendar:</strong> Neutral/bearish, 55-60% win rate</li>
+                            <li><strong>CALL Calendar:</strong> Neutral/bullish, 55-60% win rate</li>
+                            <li><strong>DOUBLE Calendar:</strong> Market neutral, <strong>65-75% win rate</strong> ⭐</li>
                         </ul>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Exit Rules - When to Take Profit or Cut Loss</h3>
-
+                        <h3 class="guide-subsection-title">When to Trade</h3>
+                        <div class="guide-table-container">
                         <table class="guide-table">
-                            <thead>
-                                <tr>
-                                    <th>Scenario</th>
-                                    <th>Action</th>
-                                    <th>Why</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>50% Profit Reached</strong></td>
-                                    <td>CLOSE ENTIRE POSITION</td>
-                                    <td>Great ROI, don't be greedy! Take the win.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>At Short Expiry</strong></td>
-                                    <td>Close if price near strike</td>
-                                    <td>Lock in max profit from theta decay</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>-50% Loss</strong></td>
-                                    <td>CUT IMMEDIATELY</td>
-                                    <td>Stop bleeding, preserve capital for better trades</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Price >7% Away from Strike</strong></td>
-                                    <td>EXIT IMMEDIATELY</td>
-                                    <td>Outside profit zone, unlikely to recover</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>IV Spikes Sharply</strong></td>
-                                    <td>Consider closing for profit</td>
-                                    <td>Long vega profits, may not sustain</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Major News/Event Coming</strong></td>
-                                    <td>Close position</td>
-                                    <td>Avoid unpredictable volatility</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Want to Roll</strong></td>
-                                    <td>Close short, keep long OR close both and re-enter</td>
-                                    <td>Only if still in profit zone and IV still low</td>
-                                </tr>
-                            </tbody>
+                            <tr><th>Condition</th><th>Why</th></tr>
+                            <tr><td>Low IV (<50%)</td><td>Cheap to buy</td></tr>
+                            <tr><td>Expect IV rise</td><td>Long vega profits</td></tr>
+                            <tr><td>Range-bound</td><td>Price stays near strike</td></tr>
+                            <tr><td>5-7 days SHORT</td><td>Max theta difference</td></tr>
                         </table>
-
-                        <div class="guide-highlight">
-                            <strong>⚡ CRITICAL EXIT DISCIPLINE:</strong><br><br>
-
-                            <strong>Take 50% profit:</strong> Don't wait for 100%! A 50% gain on 2-3% risk = great trade.<br><br>
-
-                            <strong>Cut at -50% loss:</strong> Don't hope it comes back. Preserve capital for next trade.<br><br>
-
-                            <strong>Exit if price moves >7%:</strong> You're outside profit zone. Hope won't help.<br><br>
-
-                            <strong>The trader who follows exit rules consistently WINS long-term!</strong>
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Real P&L Example - DOUBLE Calendar</h3>
+                        <h3 class="guide-subsection-title">Strike Selection</h3>
+                        <div class="guide-highlight">
+                            <strong>🎯 RULE:</strong> Use ATM strike (Delta ~0.50) 95% of the time!<br><br>
+                            <strong>Why?</strong><br>
+                            • Max time value = max theta<br>
+                            • Widest profit zone (±5-7%)<br>
+                            • Highest liquidity<br>
+                            • Best probability
+                        </div>
+                    </div>
 
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Entry & Exit Rules</h3>
                         <div class="guide-example">
-                            <strong>💰 Complete Trade Walkthrough:</strong><br><br>
+                            <strong>✅ ENTRY:</strong><br>
+                            • IV Rank/Percentile < 50<br>
+                            • ATM strike<br>
+                            • SHORT: 3-7 DTE, LONG: 14-21 DTE<br>
+                            • Risk max 2-3% of account<br><br>
 
-                            <strong>SETUP (Entry):</strong><br>
-                            Date: Monday<br>
-                            BTC Spot: ₹70,000<br>
-                            IV Rank: 35 (low - good!)<br>
-                            Market: Range-bound last 2 weeks<br><br>
+                            <strong>🚪 EXIT:</strong><br>
+                            • Take 50% profit (don't be greedy!)<br>
+                            • Cut at -50% loss<br>
+                            • Exit if price >7% away<br>
+                            • Close if IV spikes sharply
+                        </div>
+                    </div>
 
-                            <strong>SHORT Leg (3 DTE - expires Friday):</strong><br>
-                            Strike: ₹70,000 (ATM)<br>
-                            Sell 1x ₹70k PUT @ ₹400<br>
-                            Sell 1x ₹70k CALL @ ₹400<br>
-                            <strong>Total Collected: ₹800</strong><br><br>
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Real Example</h3>
+                        <div class="guide-example">
+                            <strong>💰 DOUBLE Calendar Trade:</strong><br><br>
+                            <strong>Setup:</strong> BTC ₹70,000<br>
+                            SHORT 3 DTE: Sell ₹70k PUT+CALL @ ₹800 total<br>
+                            LONG 17 DTE: Buy ₹70k PUT+CALL @ ₹1,800 total<br>
+                            <strong>Net Debit: ₹1,000</strong><br><br>
 
-                            <strong>LONG Leg (17 DTE - expires next Friday):</strong><br>
-                            Strike: ₹70,000 (ATM)<br>
-                            Buy 1x ₹70k PUT @ ₹900<br>
-                            Buy 1x ₹70k CALL @ ₹900<br>
-                            <strong>Total Paid: ₹1,800</strong><br><br>
+                            <strong>At SHORT expiry (BTC still at ₹70k):</strong><br>
+                            Short expires worthless: +₹800 profit<br>
+                            Long still worth: ₹1,400<br>
+                            Total value: ₹1,400<br>
+                            <strong>P&L: +₹400 (40% ROI)</strong> ✅<br><br>
 
-                            <strong>NET DEBIT: ₹1,000</strong><br>
-                            <strong>MAX LOSS: ₹1,000</strong><br>
-                            <strong>TARGET PROFIT: ₹500 (50% ROI)</strong><br><br>
-
-                            <strong>AT SHORT EXPIRY (Friday):</strong><br><br>
-
-                            <strong>SCENARIO 1: BTC at ₹70,000 (PERFECT!):</strong><br>
-                            Short PUT expires: ₹0 → +₹400 profit<br>
-                            Short CALL expires: ₹0 → +₹400 profit<br>
-                            Long PUT (14 DTE left): ₹700<br>
-                            Long CALL (14 DTE left): ₹700<br>
-                            Long position value: ₹1,400<br><br>
-
-                            <strong>Total P&L:</strong><br>
-                            Collected from short: +₹800<br>
-                            Current long value: ₹1,400<br>
-                            Initial cost: -₹1,800<br>
-                            Net P&L: ₹800 + ₹1,400 - ₹1,800 = <strong>+₹400 PROFIT (40% ROI)</strong> ✅<br><br>
-
-                            <strong>SCENARIO 2: BTC at ₹71,500 (+2.14%):</strong><br>
-                            Short PUT expires: ₹0 → +₹400<br>
-                            Short CALL loss: -₹1,500 (ITM by ₹1,500)<br>
-                            Long PUT: ₹200<br>
-                            Long CALL: ₹2,000<br>
-                            Long value: ₹2,200<br><br>
-
-                            <strong>Total P&L:</strong><br>
-                            ₹400 - ₹1,500 + ₹2,200 - ₹1,800 = <strong>-₹700 LOSS</strong> ❌<br>
-                            Action: Would have exited at -50% = -₹500<br><br>
-
-                            <strong>SCENARIO 3: BTC at ₹69,500 (-0.71%):</strong><br>
-                            Short PUT loss: -₹500<br>
-                            Short CALL expires: ₹0 → +₹400<br>
-                            Long PUT: ₹1,000<br>
-                            Long CALL: ₹400<br>
-                            Long value: ₹1,400<br><br>
-
-                            <strong>Total P&L:</strong><br>
-                            -₹500 + ₹400 + ₹1,400 - ₹1,800 = <strong>-₹500 LOSS</strong> ❌<br>
-                            Action: Exit at -50% stop<br><br>
-
-                            <strong>PROFIT ZONE: ₹68,500 to ₹71,500 (±2.14%)</strong><br>
-                            <strong>WIN PROBABILITY: ~70%</strong>
+                            <strong>Profit Zone:</strong> ₹68,500 - ₹71,500 (±2.14%)<br>
+                            <strong>Win Probability: ~70%</strong>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 6: ADVANCED -->
             <div class="guide-section" id="guide-advanced">
                 <div class="guide-chapter">
                     <h2 class="guide-chapter-title">Chapter 6: Advanced Topics</h2>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">Position Sizing - The Math</h3>
-
+                        <h3 class="guide-subsection-title">Position Sizing</h3>
                         <div class="guide-formula">
-                            <strong>POSITION SIZE FORMULA:</strong><br><br>
-                            Position Size = (Account Risk % × Account Size) ÷ Max Loss per Contract
+                            Position Size = (Risk % × Account) ÷ Max Loss per Contract
                         </div>
-
                         <div class="guide-example">
-                            <strong>Example 1: Conservative Trader</strong><br>
+                            <strong>Example:</strong><br>
                             Account: ₹10,00,000<br>
-                            Risk per trade: 2%<br>
-                            Calendar max loss: ₹1,000<br><br>
-
-                            Position = (0.02 × ₹10,00,000) ÷ ₹1,000<br>
-                            = ₹20,000 ÷ ₹1,000<br>
-                            = <strong>20 contracts max</strong><br><br>
-
-                            <strong>Example 2: Aggressive Trader</strong><br>
-                            Account: ₹5,00,000<br>
-                            Risk: 3%<br>
-                            Max loss: ₹500<br><br>
-
-                            Position = (0.03 × ₹5,00,000) ÷ ₹500<br>
-                            = ₹15,000 ÷ ₹500<br>
-                            = <strong>30 contracts max</strong>
+                            Risk: 2%<br>
+                            Max loss: ₹500<br>
+                            Position = (0.02 × 10,00,000) ÷ 500 = <strong>40 contracts</strong>
                         </div>
                     </div>
 
                     <div class="guide-subsection">
-                        <h3 class="guide-subsection-title">🏆 Golden Rules for Success</h3>
-
+                        <h3 class="guide-subsection-title">🏆 Golden Rules</h3>
                         <div class="guide-highlight">
                             <ol class="guide-list">
-                                <li><strong>Master ONE strategy first:</strong> Calendar spreads are perfect to start</li>
-                                <li><strong>Paper trade 3 months:</strong> Before risking real money</li>
-                                <li><strong>Size small:</strong> Better to survive than blow up</li>
-                                <li><strong>Take 50% profits:</strong> Don't be greedy!</li>
-                                <li><strong>Cut at -50% loss:</strong> Preserve capital</li>
-                                <li><strong>Never risk >3%:</strong> Per trade, ever</li>
-                                <li><strong>Trade liquid options only:</strong> BTC, ETH, major indices</li>
-                                <li><strong>Keep learning:</strong> Markets evolve, so should you</li>
-                                <li><strong>Journal every trade:</strong> Learn from wins AND losses</li>
-                                <li><strong>Be patient:</strong> Wait for YOUR setup</li>
+                                <li>Master calendar spreads first</li>
+                                <li>Paper trade 3 months</li>
+                                <li>Take 50% profits</li>
+                                <li>Cut at -50% loss</li>
+                                <li>Never risk >3% per trade</li>
+                                <li>Trade liquid options only</li>
+                                <li>Keep learning!</li>
                             </ol>
                         </div>
                     </div>
@@ -2656,7 +1822,7 @@
             </div>
 
             <div style="text-align: center; margin: 40px 0;">
-                <button class="btn" style="font-size: 1.2em; padding: 20px 40px;" onclick="closeGuide()">✅ Close Guide & Start Trading</button>
+                <button class="btn" onclick="closeGuide()">✅ Close & Start Trading</button>
             </div>
         </div>
     </div>
@@ -2666,20 +1832,17 @@
             document.getElementById('guideModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
         function closeGuide() {
             document.getElementById('guideModal').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-
-        function showGuideSection(sectionId) {
+        function showGuideSection(id) {
             document.querySelectorAll('.guide-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.guide-nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('guide-' + sectionId).classList.add('active');
+            document.getElementById('guide-' + id).classList.add('active');
             event.target.classList.add('active');
             document.querySelector('.guide-content').scrollTop = 0;
         }
-
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeGuide();
         });
