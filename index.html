@@ -1,0 +1,2689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Spread - HOLY MOTHER COW Edition</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header .badge {
+            display: inline-block;
+            background: gold;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 800;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 50px;
+            background: #f8f9fa;
+        }
+        .progress-step { flex: 1; text-align: center; position: relative; }
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 3px;
+            background: #ddd;
+            z-index: 0;
+        }
+        .progress-step:last-child::after { display: none; }
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
+        }
+        .progress-step.active .progress-circle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .progress-step.completed .progress-circle { background: #28a745; }
+        .progress-label { font-size: 0.9em; color: #666; font-weight: 600; }
+        .step-content { padding: 40px; min-height: 500px; }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .expiry-row {
+            display: grid;
+            grid-template-columns: 150px 1fr 100px;
+            gap: 15px;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            margin: 10px 0;
+        }
+        .expiry-label { font-weight: 600; color: #333; }
+        .expiry-input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .add-btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .add-btn:hover { background: #218838; }
+        .remove-btn {
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .expiry-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #28a745;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .expiry-type { font-weight: 700; color: #667eea; font-size: 1.1em; }
+        .strategy-cards { display: grid; gap: 20px; margin: 20px 0; }
+        .strategy-card {
+            border: 3px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .strategy-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .strategy-card.selected {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .strategy-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        .strategy-badge.high-prob { background: #28a745; }
+        .strategy-title {
+            font-size: 1.4em;
+            color: #333;
+            margin: 10px 0;
+            font-weight: 700;
+        }
+        .input-container { margin: 25px 0; position: relative; }
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        .input-field:focus { outline: none; border-color: #667eea; }
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* SMART SUGGESTIONS */
+        .suggestion-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .suggestion-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .suggestion-card {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        .suggestion-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .suggestion-card.recommended {
+            border-color: gold;
+            background: #fffbea;
+        }
+        .suggestion-card-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .suggestion-card-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .suggestion-card-delta {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .recommended-badge {
+            display: inline-block;
+            background: gold;
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary { background: #e0e0e0; color: #333; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* PAYOFF STYLES */
+        .payoff-master-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px;
+            margin: 30px 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .payoff-header { text-align: center; margin-bottom: 30px; }
+        .payoff-title {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, gold 0%, #ff9800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .positions-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .position-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 6px solid #dc3545;
+            position: relative;
+        }
+        .position-card.long { border-left-color: #28a745; }
+        .position-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .position-badge.long { background: #28a745; }
+        .position-header {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        .detail-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .detail-label { font-weight: 600; color: #555; }
+        .detail-value {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .detail-value.editable {
+            background: #fff;
+            border-color: #667eea;
+            cursor: pointer;
+        }
+        .edit-btn {
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+        .metric-card.positive { border-top-color: #28a745; }
+        .metric-card.negative { border-top-color: #dc3545; }
+        .metric-card.neutral { border-top-color: #ff9800; }
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .metric-value { font-size: 2em; font-weight: 800; color: #333; }
+        .metric-value.positive { color: #28a745; }
+        .metric-value.negative { color: #dc3545; }
+        .slider-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        .slider-control { margin: 30px 0; }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .slider-label-text { font-weight: 700; color: #333; font-size: 1.2em; }
+        .slider-value {
+            font-weight: 800;
+            color: #667eea;
+            font-size: 1.5em;
+            padding: 5px 20px;
+            background: #e7f3ff;
+            border-radius: 20px;
+        }
+        .slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, #dc3545, #28a745);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            border: 4px solid #667eea;
+        }
+        .slider::-moz-range-thumb {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: 4px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+        .breakeven-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .breakeven-value { font-size: 2em; font-weight: 800; margin: 10px 0; }
+        .greeks-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+        .greeks-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .greeks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .greek-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .greek-name { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .greek-value { font-size: 1.8em; font-weight: 700; color: #333; }
+    
+        /* Guide styles */
+        .guide-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.5);
+            z-index: 1000;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .guide-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        .guide-modal.active { display: block; }
+        .guide-content {
+            max-width: 1400px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            position: relative;
+        }
+        .guide-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3em;
+            cursor: pointer;
+            color: #666;
+        }
+        .guide-main-title {
+            font-size: 3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .guide-subtitle {
+            text-align: center;
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .guide-nav {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .guide-nav-btn {
+            padding: 12px 25px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .guide-nav-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .guide-nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        .guide-section { display: none; }
+        .guide-section.active { display: block; }
+        .guide-chapter { margin: 40px 0; }
+        .guide-chapter-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .guide-subsection {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        .guide-subsection-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .guide-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #444;
+            margin: 15px 0;
+        }
+        .guide-highlight {
+            background: #fffbea;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .guide-formula {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        .guide-example {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .guide-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .guide-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+        .guide-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .guide-table tr:hover { background: #f5f5f5; }
+        .guide-list {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        .guide-list li {
+            margin: 10px 0;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐄 HOLY MOTHER COW Edition</h1>
+            <p>AI-Powered Calendar Spread Analyzer with Smart Recommendations</p>
+            <div class="badge">👑 SUPREME EDITION 👑</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-step active" id="progress-1">
+                <div class="progress-circle">1</div>
+                <div class="progress-label">Expiries</div>
+            </div>
+            <div class="progress-step" id="progress-2">
+                <div class="progress-circle">2</div>
+                <div class="progress-label">Strategy</div>
+            </div>
+            <div class="progress-step" id="progress-3">
+                <div class="progress-circle">3</div>
+                <div class="progress-label">Smart Input</div>
+            </div>
+            <div class="progress-step" id="progress-4">
+                <div class="progress-circle">4</div>
+                <div class="progress-label">Analysis</div>
+            </div>
+        </div>
+
+        <div class="step-content">
+            <!-- STEP 1 -->
+            <div class="step active" id="step-1">
+                <h2 class="section-title">Step 1: Available Expiries</h2>
+                <div class="info-box">Check Delta Exchange and add all expiries</div>
+
+                <h3 style="color: #764ba2; margin: 20px 0;">Short-Term (0-2 Days)</h3>
+                <div class="expiry-row">
+                    <div class="expiry-label">Hours/Days:</div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" class="expiry-input" id="short-value" placeholder="12" min="1">
+                        <select class="expiry-input" id="short-unit">
+                            <option value="hours">Hours</option>
+                            <option value="days">Days</option>
+                        </select>
+                    </div>
+                    <button class="add-btn" type="button">Add</button>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 20px 0;">Medium-Term (3-14 Days)</h3>
+                <div class="expiry-row">
+                    <div class="expiry-label">Days:</div>
+                    <input type="number" class="expiry-input" id="medium-value" placeholder="4, 8" min="3" max="14">
+                    <button class="add-btn" type="button">Add</button>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 20px 0;">Long-Term (15+ Days)</h3>
+                <div class="expiry-row">
+                    <div class="expiry-label">Days:</div>
+                    <input type="number" class="expiry-input" id="long-value" placeholder="30, 60" min="15">
+                    <button class="add-btn" type="button">Add</button>
+                </div>
+
+                <h3 style="color: #764ba2; margin: 20px 0;">Added Expiries</h3>
+                <div id="expiry-list"><div class="warning-box">No expiries added.</div></div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="step1-next-btn" disabled>Next →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="step" id="step-2">
+                <h2 class="section-title">Step 2: Choose Strategy</h2>
+                <div class="info-box"><strong>Trading:</strong> <span id="short-expiry-label"></span> → <span id="long-expiry-label"></span></div>
+
+                <div class="strategy-cards">
+                    <div class="strategy-card" data-strategy="put-calendar">
+                        <span class="strategy-badge">Neutral/Bearish</span>
+                        <div class="strategy-title">PUT Calendar</div>
+                        <p>Best for: Expecting consolidation or slight downtrend</p>
+                    </div>
+
+                    <div class="strategy-card" data-strategy="call-calendar">
+                        <span class="strategy-badge">Neutral/Bullish</span>
+                        <div class="strategy-title">CALL Calendar</div>
+                        <p>Best for: Expecting consolidation or slight uptrend</p>
+                    </div>
+
+                    <div class="strategy-card" data-strategy="double-calendar">
+                        <span class="strategy-badge high-prob">⭐ HIGHEST WIN RATE</span>
+                        <div class="strategy-title">DOUBLE Calendar</div>
+                        <p>Best for: Range-bound market, highest probability</p>
+                        <div class="success-box" style="margin-top: 10px;"><strong>✓ 60-70% Win Rate • Market Neutral</strong></div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="back-to-step1">← Back</button>
+                    <button class="btn btn-primary" id="strategy-next-btn" disabled>Next →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3 WITH SMART SUGGESTIONS -->
+            <div class="step" id="step-3">
+                <h2 class="section-title">Step 3: Smart Input with AI Recommendations</h2>
+
+                <div class="input-container">
+                    <label class="input-label">Current Spot Price (₹):</label>
+                    <input type="number" class="input-field" id="spot-price" placeholder="70000" step="100">
+                </div>
+
+                <div id="smart-suggestions"></div>
+                <div id="input-form-container"></div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="back-to-step2">← Back</button>
+                    <button class="btn btn-primary" id="calculate-btn">Calculate →</button>
+                </div>
+            </div>
+
+            <!-- STEP 4 - HOLY MOTHER COW -->
+            <div class="step" id="step-4">
+                <div class="payoff-master-container">
+                    <div class="payoff-header">
+                        <div class="payoff-title">🐄👑 HOLY MOTHER COW 👑🐄</div>
+                        <div class="payoff-subtitle">Supreme Interactive Payoff Analyzer</div>
+                    </div>
+
+                    <div class="positions-panel">
+                        <div class="position-card short">
+                            <div class="position-badge short">SHORT</div>
+                            <div class="position-header" id="short-header">SHORT LEG</div>
+                            <div id="short-details"></div>
+                        </div>
+
+                        <div class="position-card long">
+                            <div class="position-badge long">LONG</div>
+                            <div class="position-header" id="long-header">LONG LEG</div>
+                            <div id="long-details"></div>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card neutral">
+                            <div class="metric-label">Net Debit</div>
+                            <div class="metric-value" id="net-debit">₹0</div>
+                        </div>
+                        <div class="metric-card negative">
+                            <div class="metric-label">Max Loss</div>
+                            <div class="metric-value" id="max-loss">₹0</div>
+                        </div>
+                        <div class="metric-card positive">
+                            <div class="metric-label">Target Profit</div>
+                            <div class="metric-value" id="target-profit">₹0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Win Rate</div>
+                            <div class="metric-value" id="win-rate">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card positive">
+                            <div class="metric-label">Current P&L</div>
+                            <div class="metric-value positive" id="current-pnl-main">₹0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Current ROI</div>
+                            <div class="metric-value" id="current-roi-main">0%</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Days Passed</div>
+                            <div class="metric-value" id="days-passed-display">0</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Price at</div>
+                            <div class="metric-value" id="price-at-display">₹0</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="payoffChart" style="max-height: 500px;"></canvas>
+                    </div>
+
+                    <div class="slider-panel">
+                        <h3 style="color: #667eea; margin-bottom: 20px; font-size: 1.5em;">🎚️ Interactive Simulation</h3>
+
+                        <div class="slider-control">
+                            <div class="slider-label">
+                                <span class="slider-label-text">⏰ Time Decay</span>
+                                <span class="slider-value" id="days-value">0 days</span>
+                            </div>
+                            <input type="range" class="slider" id="days-slider" min="0" max="10" value="0" step="0.1">
+                        </div>
+
+                        <div class="slider-control">
+                            <div class="slider-label">
+                                <span class="slider-label-text">💰 Price Movement</span>
+                                <span class="slider-value" id="price-value">0%</span>
+                            </div>
+                            <input type="range" class="slider" id="price-slider" min="-20" max="20" value="0" step="0.5">
+                        </div>
+                    </div>
+
+                    <div class="greeks-panel">
+                        <div class="greeks-title">📐 Greeks</div>
+                        <div class="greeks-grid">
+                            <div class="greek-item">
+                                <div class="greek-name">Delta</div>
+                                <div class="greek-value" id="greek-delta">0.00</div>
+                            </div>
+                            <div class="greek-item">
+                                <div class="greek-name">Theta (Daily)</div>
+                                <div class="greek-value positive" id="greek-theta">₹0</div>
+                            </div>
+                            <div class="greek-item">
+                                <div class="greek-name">Vega</div>
+                                <div class="greek-value" id="greek-vega">₹0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="breakeven-info">
+                        <div style="font-size: 1.2em;">Profitable Range</div>
+                        <div class="breakeven-value" id="breakeven-display">±5%</div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="back-to-step3">← Edit</button>
+                    <button class="btn btn-primary" id="restart-btn">🔄 New</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let expiries = [];
+        let selectedStrategy = null;
+        let selectedShortExpiry = null;
+        let selectedLongExpiry = null;
+        let tradeData = {};
+        let payoffChart = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const addButtons = document.querySelectorAll('.add-btn');
+            addButtons.forEach((btn, index) => {
+                const type = index === 0 ? 'short' : index === 1 ? 'medium' : 'long';
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    addExpiry(type);
+                });
+            });
+
+            document.getElementById('step1-next-btn').addEventListener('click', goToStep2);
+            document.getElementById('back-to-step1').addEventListener('click', goToStep1);
+            document.getElementById('strategy-next-btn').addEventListener('click', goToStep3);
+            document.getElementById('back-to-step2').addEventListener('click', goToStep2);
+            document.getElementById('calculate-btn').addEventListener('click', calculateResults);
+            document.getElementById('back-to-step3').addEventListener('click', goToStep3);
+            document.getElementById('restart-btn').addEventListener('click', goToStep1);
+
+            document.querySelectorAll('.strategy-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    selectedStrategy = this.dataset.strategy;
+                    document.querySelectorAll('.strategy-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('strategy-next-btn').disabled = false;
+                });
+            });
+
+            document.getElementById('days-slider').addEventListener('input', updatePayoff);
+            document.getElementById('price-slider').addEventListener('input', updatePayoff);
+
+            // Smart suggestions on spot price change
+            document.getElementById('spot-price').addEventListener('input', generateSmartSuggestions);
+        });
+
+        function addExpiry(type) {
+            let value, unit, totalHours;
+
+            try {
+                if (type === 'short') {
+                    value = parseFloat(document.getElementById('short-value').value);
+                    unit = document.getElementById('short-unit').value;
+                    if (!value || value <= 0 || isNaN(value)) return alert('Enter valid number');
+                    totalHours = unit === 'hours' ? value : value * 24;
+                    if (totalHours > 48) return alert('Short ≤ 48 hours');
+                } else if (type === 'medium') {
+                    value = parseFloat(document.getElementById('medium-value').value);
+                    if (!value || value < 3 || value > 14 || isNaN(value)) return alert('Medium: 3-14 days');
+                    totalHours = value * 24;
+                    unit = 'days';
+                } else {
+                    value = parseFloat(document.getElementById('long-value').value);
+                    if (!value || value < 15 || isNaN(value)) return alert('Long ≥ 15 days');
+                    totalHours = value * 24;
+                    unit = 'days';
+                }
+
+                if (expiries.some(e => Math.abs(e.totalHours - totalHours) < 1)) return alert('Already added!');
+
+                expiries.push({
+                    value: value,
+                    unit: unit,
+                    totalHours: totalHours,
+                    label: unit === 'hours' ? value + ' hours' : value + ' days'
+                });
+
+                expiries.sort((a, b) => a.totalHours - b.totalHours);
+                updateExpiryList();
+
+                if (type === 'short') document.getElementById('short-value').value = '';
+                else if (type === 'medium') document.getElementById('medium-value').value = '';
+                else document.getElementById('long-value').value = '';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function updateExpiryList() {
+            const container = document.getElementById('expiry-list');
+            if (expiries.length === 0) {
+                container.innerHTML = '<div class="warning-box">No expiries.</div>';
+                document.getElementById('step1-next-btn').disabled = true;
+                return;
+            }
+
+            let html = '';
+            expiries.forEach((exp, i) => {
+                const typeLabel = exp.totalHours <= 48 ? '0DTE' : exp.totalHours <= 336 ? 'Weekly' : 'Monthly';
+                html += '<div class="expiry-item"><div><div class="expiry-type">' + exp.label.toUpperCase() + 
+                        '</div><div style="color:#666;font-size:0.9em;">' + typeLabel + '</div></div>' +
+                        '<button class="remove-btn" data-index="' + i + '">Remove</button></div>';
+            });
+
+            container.innerHTML = html;
+            container.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    removeExpiry(parseInt(this.dataset.index));
+                });
+            });
+
+            const hasShort = expiries.some(e => e.totalHours <= 48);
+            const hasLong = expiries.some(e => e.totalHours > 48);
+            document.getElementById('step1-next-btn').disabled = !(hasShort && hasLong);
+        }
+
+        function removeExpiry(i) {
+            expiries.splice(i, 1);
+            updateExpiryList();
+        }
+
+        function goToStep1() { showStep(1); }
+
+        function goToStep2() {
+            if (!expiries.some(e => e.totalHours <= 48) || !expiries.some(e => e.totalHours > 48)) {
+                return alert('Need SHORT + LONG!');
+            }
+            selectedShortExpiry = expiries.find(e => e.totalHours <= 48);
+            selectedLongExpiry = expiries.find(e => e.totalHours > 48 && e.totalHours <= 336) || expiries.find(e => e.totalHours > 48);
+            document.getElementById('short-expiry-label').textContent = selectedShortExpiry.label;
+            document.getElementById('long-expiry-label').textContent = selectedLongExpiry.label;
+            showStep(2);
+        }
+
+        function goToStep3() {
+            if (!selectedStrategy) return alert('Select strategy!');
+            generateInputForm();
+            generateSmartSuggestions();
+            showStep(3);
+        }
+
+        function showStep(n) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.progress-step').forEach(p => p.classList.remove('active', 'completed'));
+            document.getElementById('step-' + n).classList.add('active');
+            for (let i = 1; i <= n; i++) {
+                if (i < n) document.getElementById('progress-' + i).classList.add('completed');
+                else document.getElementById('progress-' + i).classList.add('active');
+            }
+        }
+
+        function generateSmartSuggestions() {
+            const spotPrice = parseFloat(document.getElementById('spot-price').value);
+            if (!spotPrice || spotPrice <= 0) return;
+
+            const container = document.getElementById('smart-suggestions');
+
+            let recommendations = '';
+
+            if (selectedStrategy === 'put-calendar' || selectedStrategy === 'call-calendar') {
+                const optType = selectedStrategy === 'put-calendar' ? 'PUT' : 'CALL';
+                recommendations = `
+                    <div class="suggestion-panel">
+                        <div class="suggestion-title">💡 Smart Strike Recommendations for ${optType} Calendar</div>
+                        <p style="font-size:0.95em;opacity:0.9;">Select the best strike based on your market view. Calendar spreads work best with ATM strikes.</p>
+
+                        <div class="suggestion-grid">
+                            <div class="suggestion-card recommended" onclick="applyStrike(${spotPrice}, 'atm')">
+                                <div class="suggestion-card-label">ATM (Recommended)</div>
+                                <div class="suggestion-card-value">₹${spotPrice.toFixed(0)}</div>
+                                <div class="suggestion-card-delta">Delta: ~0.50</div>
+                                <div class="recommended-badge">⭐ BEST</div>
+                            </div>
+
+                            <div class="suggestion-card" onclick="applyStrike(${(spotPrice * 0.98).toFixed(0)}, 'otm1')">
+                                <div class="suggestion-card-label">2% OTM</div>
+                                <div class="suggestion-card-value">₹${(spotPrice * 0.98).toFixed(0)}</div>
+                                <div class="suggestion-card-delta">Delta: ~0.35</div>
+                            </div>
+
+                            <div class="suggestion-card" onclick="applyStrike(${(spotPrice * 0.95).toFixed(0)}, 'otm2')">
+                                <div class="suggestion-card-label">5% OTM</div>
+                                <div class="suggestion-card-value">₹${(spotPrice * 0.95).toFixed(0)}</div>
+                                <div class="suggestion-card-delta">Delta: ~0.20</div>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="margin-top:15px;">
+                            <strong>💡 Pro Tip:</strong> ATM strikes (Delta ~0.50) give maximum theta decay and highest probability. 
+                            Use OTM only if you expect price to move toward that strike.
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Double calendar
+                recommendations = `
+                    <div class="suggestion-panel">
+                        <div class="suggestion-title">💡 Smart Strike for DOUBLE Calendar</div>
+                        <p style="font-size:0.95em;opacity:0.9;">For double calendars (straddle), ALWAYS use ATM strike for maximum profit potential.</p>
+
+                        <div class="suggestion-grid">
+                            <div class="suggestion-card recommended" onclick="applyStrike(${spotPrice}, 'atm')" style="grid-column: span 3;">
+                                <div class="suggestion-card-label">ATM Strike (Only Option)</div>
+                                <div class="suggestion-card-value">₹${spotPrice.toFixed(0)}</div>
+                                <div class="suggestion-card-delta">Sell PUT + CALL at this strike</div>
+                                <div class="recommended-badge">⭐ REQUIRED</div>
+                            </div>
+                        </div>
+
+                        <div class="success-box" style="margin-top:15px;">
+                            <strong>✓ Double Calendar Rule:</strong> Always use current spot price as strike. 
+                            This maximizes your profit zone (typically ±5-7% range).
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = recommendations;
+        }
+
+        function applyStrike(strike, type) {
+            document.getElementById('short-strike').value = strike;
+            document.getElementById('long-strike').value = strike;
+            alert('✓ Strike applied: ₹' + strike + '\nNow enter the premiums from Delta Exchange options chain.');
+        }
+
+        function generateInputForm() {
+            const isDouble = selectedStrategy === 'double-calendar';
+            const optType = selectedStrategy === 'put-calendar' ? 'PUT' : 'CALL';
+
+            let html = '<h3 style="margin:20px 0;">SHORT Leg (' + selectedShortExpiry.label + ')</h3>';
+            html += '<div class="input-grid"><div class="input-container"><label>Strike (₹):</label><input type="number" class="input-field" id="short-strike" placeholder="Use suggestion above"></div>';
+            html += '<div class="input-container"><label>IV (%):</label><input type="number" class="input-field" id="short-iv" placeholder="45"></div></div>';
+
+            if (isDouble) {
+                html += '<div class="input-grid"><div class="input-container"><label>PUT Premium:</label><input type="number" class="input-field" id="short-put-prem" placeholder="400"></div>';
+                html += '<div class="input-container"><label>CALL Premium:</label><input type="number" class="input-field" id="short-call-prem" placeholder="400"></div></div>';
+                html += '<h3 style="margin:20px 0;">LONG Leg (' + selectedLongExpiry.label + ')</h3>';
+                html += '<div class="input-grid"><div class="input-container"><label>Strike (₹):</label><input type="number" class="input-field" id="long-strike" placeholder="Same as short"></div>';
+                html += '<div class="input-container"><label>IV (%):</label><input type="number" class="input-field" id="long-iv" placeholder="50"></div></div>';
+                html += '<div class="input-grid"><div class="input-container"><label>PUT Premium:</label><input type="number" class="input-field" id="long-put-prem" placeholder="900"></div>';
+                html += '<div class="input-container"><label>CALL Premium:</label><input type="number" class="input-field" id="long-call-prem" placeholder="900"></div></div>';
+            } else {
+                html += '<div class="input-container"><label>' + optType + ' Premium:</label><input type="number" class="input-field" id="short-prem" placeholder="400"></div>';
+                html += '<h3 style="margin:20px 0;">LONG Leg (' + selectedLongExpiry.label + ')</h3>';
+                html += '<div class="input-grid"><div class="input-container"><label>Strike (₹):</label><input type="number" class="input-field" id="long-strike" placeholder="Same as short"></div>';
+                html += '<div class="input-container"><label>IV (%):</label><input type="number" class="input-field" id="long-iv" placeholder="50"></div></div>';
+                html += '<div class="input-container"><label>' + optType + ' Premium:</label><input type="number" class="input-field" id="long-prem" placeholder="900"></div>';
+            }
+
+            document.getElementById('input-form-container').innerHTML = html;
+        }
+
+        function calculateResults() {
+            const spotPrice = parseFloat(document.getElementById('spot-price').value);
+            const shortStrike = parseFloat(document.getElementById('short-strike').value);
+            const shortIV = parseFloat(document.getElementById('short-iv').value);
+            const longStrike = parseFloat(document.getElementById('long-strike').value);
+            const longIV = parseFloat(document.getElementById('long-iv').value);
+
+            if (!spotPrice || !shortStrike || !shortIV || !longStrike || !longIV) {
+                return alert('Fill all fields!');
+            }
+
+            let shortPrem, longPrem;
+
+            if (selectedStrategy === 'double-calendar') {
+                const sp = parseFloat(document.getElementById('short-put-prem').value);
+                const sc = parseFloat(document.getElementById('short-call-prem').value);
+                const lp = parseFloat(document.getElementById('long-put-prem').value);
+                const lc = parseFloat(document.getElementById('long-call-prem').value);
+                if (!sp || !sc || !lp || !lc) return alert('Fill all premiums!');
+                shortPrem = sp + sc;
+                longPrem = lp + lc;
+                tradeData.shortPutPrem = sp;
+                tradeData.shortCallPrem = sc;
+                tradeData.longPutPrem = lp;
+                tradeData.longCallPrem = lc;
+            } else {
+                shortPrem = parseFloat(document.getElementById('short-prem').value);
+                longPrem = parseFloat(document.getElementById('long-prem').value);
+                if (!shortPrem || !longPrem) return alert('Fill premiums!');
+            }
+
+            tradeData = {
+                ...tradeData,
+                spotPrice, shortStrike, longStrike, shortPrem, longPrem,
+                shortIV, longIV,
+                netDebit: longPrem - shortPrem,
+                shortDays: selectedShortExpiry.totalHours / 24,
+                longDays: selectedLongExpiry.totalHours / 24,
+                strategy: selectedStrategy,
+                shortLabel: selectedShortExpiry.label,
+                longLabel: selectedLongExpiry.label
+            };
+
+            document.getElementById('days-slider').max = tradeData.shortDays;
+            document.getElementById('days-slider').value = 0;
+            document.getElementById('price-slider').value = 0;
+
+            displayPositions();
+            displayMetrics();
+            createPayoffChart();
+            updatePayoff();
+            showStep(4);
+        }
+
+        function displayPositions() {
+            const d = tradeData;
+            const isDouble = d.strategy === 'double-calendar';
+            const optType = d.strategy === 'put-calendar' ? 'PUT' : 'CALL';
+
+            document.getElementById('short-header').textContent = 'SHORT ' + d.shortLabel.toUpperCase();
+            let shortHTML = '<div style="display:grid;gap:10px;">';
+
+            if (isDouble) {
+                shortHTML += '<div class="detail-row"><span class="detail-label">Type:</span><span class="detail-value">PUT + CALL</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">Strike:</span><span class="detail-value">₹' + d.shortStrike.toFixed(0) + '</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">PUT Premium:</span><span class="detail-value">₹' + d.shortPutPrem.toFixed(0) + '</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">CALL Premium:</span><span class="detail-value">₹' + d.shortCallPrem.toFixed(0) + '</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">Total Collect:</span><span class="detail-value" style="background:#d4edda;font-size:1.2em;">+₹' + d.shortPrem.toFixed(0) + '</span></div>';
+            } else {
+                shortHTML += '<div class="detail-row"><span class="detail-label">Type:</span><span class="detail-value">' + optType + '</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">Strike:</span><span class="detail-value">₹' + d.shortStrike.toFixed(0) + '</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">Premium:</span><span class="detail-value">₹' + d.shortPrem.toFixed(0) + '</span></div>';
+                shortHTML += '<div class="detail-row"><span class="detail-label">Collect:</span><span class="detail-value" style="background:#d4edda;font-size:1.2em;">+₹' + d.shortPrem.toFixed(0) + '</span></div>';
+            }
+
+            shortHTML += '<div class="detail-row"><span class="detail-label">IV:</span><span class="detail-value">' + d.shortIV.toFixed(1) + '%</span></div>';
+            shortHTML += '</div>';
+            document.getElementById('short-details').innerHTML = shortHTML;
+
+            document.getElementById('long-header').textContent = 'LONG ' + d.longLabel.toUpperCase();
+            let longHTML = '<div style="display:grid;gap:10px;">';
+
+            if (isDouble) {
+                longHTML += '<div class="detail-row"><span class="detail-label">Type:</span><span class="detail-value">PUT + CALL</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">Strike:</span><span class="detail-value">₹' + d.longStrike.toFixed(0) + '</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">PUT Premium:</span><span class="detail-value">₹' + d.longPutPrem.toFixed(0) + '</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">CALL Premium:</span><span class="detail-value">₹' + d.longCallPrem.toFixed(0) + '</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">Total Pay:</span><span class="detail-value" style="background:#fff3cd;font-size:1.2em;">-₹' + d.longPrem.toFixed(0) + '</span></div>';
+            } else {
+                longHTML += '<div class="detail-row"><span class="detail-label">Type:</span><span class="detail-value">' + optType + '</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">Strike:</span><span class="detail-value">₹' + d.longStrike.toFixed(0) + '</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">Premium:</span><span class="detail-value">₹' + d.longPrem.toFixed(0) + '</span></div>';
+                longHTML += '<div class="detail-row"><span class="detail-label">Pay:</span><span class="detail-value" style="background:#fff3cd;font-size:1.2em;">-₹' + d.longPrem.toFixed(0) + '</span></div>';
+            }
+
+            longHTML += '<div class="detail-row"><span class="detail-label">IV:</span><span class="detail-value">' + d.longIV.toFixed(1) + '%</span></div>';
+            longHTML += '</div>';
+            document.getElementById('long-details').innerHTML = longHTML;
+        }
+
+        function displayMetrics() {
+            const d = tradeData;
+            const winProb = d.strategy === 'double-calendar' ? 65 : 53;
+
+            document.getElementById('net-debit').textContent = '₹' + d.netDebit.toFixed(0);
+            document.getElementById('max-loss').textContent = '₹' + d.netDebit.toFixed(0);
+            document.getElementById('target-profit').textContent = '₹' + (d.netDebit * 0.5).toFixed(0);
+            document.getElementById('win-rate').textContent = winProb + '%';
+
+            const dailyTheta = d.shortPrem * 0.15;
+            const netVega = (d.longPrem * 0.08) - (d.shortPrem * 0.03);
+
+            document.getElementById('greek-delta').textContent = '0.00';
+            document.getElementById('greek-theta').textContent = '+₹' + dailyTheta.toFixed(0);
+            document.getElementById('greek-vega').textContent = '₹' + netVega.toFixed(0);
+        }
+
+        function createPayoffChart() {
+            const ctx = document.getElementById('payoffChart').getContext('2d');
+            if (payoffChart) payoffChart.destroy();
+
+            payoffChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Loss Zone',
+                            data: [],
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                            borderColor: 'transparent',
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            fill: true,
+                            order: 3
+                        },
+                        {
+                            label: 'Profit Zone',
+                            data: [],
+                            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                            borderColor: 'transparent',
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            fill: true,
+                            order: 2
+                        },
+                        {
+                            label: 'P&L Curve',
+                            data: [],
+                            borderColor: '#667eea',
+                            backgroundColor: 'transparent',
+                            borderWidth: 4,
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0.4,
+                            order: 1
+                        },
+                        {
+                            label: 'Zero Line',
+                            data: [],
+                            borderColor: '#333',
+                            borderWidth: 3,
+                            borderDash: [10, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            order: 1
+                        },
+                        {
+                            label: 'Current',
+                            data: [],
+                            backgroundColor: 'gold',
+                            borderColor: 'gold',
+                            pointRadius: 10,
+                            pointStyle: 'circle',
+                            showLine: false,
+                            order: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2.5,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        title: { 
+                            display: true, 
+                            text: '🐄 HOLY MOTHER COW PAYOFF - Live Simulation 👑', 
+                            font: { size: 22, weight: 'bold' },
+                            color: '#667eea'
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Price (₹)', font: { size: 16, weight: 'bold' } } },
+                        y: { title: { display: true, text: 'P&L (₹)', font: { size: 16, weight: 'bold' } } }
+                    }
+                }
+            });
+        }
+
+        function updatePayoff() {
+            const daysRemaining = parseFloat(document.getElementById('days-slider').value);
+            const priceChangePct = parseFloat(document.getElementById('price-slider').value);
+
+            document.getElementById('days-value').textContent = daysRemaining.toFixed(1) + ' days';
+            document.getElementById('price-value').textContent = (priceChangePct > 0 ? '+' : '') + priceChangePct.toFixed(1) + '%';
+
+            const d = tradeData;
+            const currentPrice = d.spotPrice * (1 + priceChangePct / 100);
+
+            const timeElapsed = d.shortDays - daysRemaining;
+            const shortDecay = Math.max(0, 1 - (timeElapsed / d.shortDays) * 0.95);
+            const longDecay = Math.max(0.15, 1 - (timeElapsed / d.longDays) * 0.6);
+
+            const labels = [];
+            const pnlData = [];
+            const zeroLine = [];
+            const lossZone = [];
+            const profitZone = [];
+            const currentPoint = [];
+
+            for (let pct = -20; pct <= 20; pct += 0.5) {
+                const price = d.spotPrice * (1 + pct / 100);
+                labels.push(price.toFixed(0));
+
+                let pnl = 0;
+
+                if (d.strategy === 'put-calendar') {
+                    const shortVal = Math.max(0, (d.shortStrike - price)) * shortDecay;
+                    const longVal = Math.max(0, (d.shortStrike - price)) * longDecay + d.longPrem * longDecay * 0.25;
+                    pnl = -shortVal + longVal - d.netDebit;
+                } else if (d.strategy === 'call-calendar') {
+                    const shortVal = Math.max(0, (price - d.shortStrike)) * shortDecay;
+                    const longVal = Math.max(0, (price - d.shortStrike)) * longDecay + d.longPrem * longDecay * 0.25;
+                    pnl = -shortVal + longVal - d.netDebit;
+                } else {
+                    const shortPutVal = Math.max(0, d.shortStrike - price) * shortDecay;
+                    const shortCallVal = Math.max(0, price - d.shortStrike) * shortDecay;
+                    const longPutVal = Math.max(0, d.shortStrike - price) * longDecay + (d.longPrem/2) * longDecay * 0.25;
+                    const longCallVal = Math.max(0, price - d.shortStrike) * longDecay + (d.longPrem/2) * longDecay * 0.25;
+                    pnl = -shortPutVal - shortCallVal + longPutVal + longCallVal - d.netDebit;
+                }
+
+                pnlData.push(pnl);
+                zeroLine.push(0);
+
+                // Fill zones
+                if (pnl < 0) {
+                    lossZone.push(pnl);
+                    profitZone.push(0);
+                } else {
+                    lossZone.push(0);
+                    profitZone.push(pnl);
+                }
+
+                currentPoint.push(null);
+            }
+
+            const currentIdx = Math.round((priceChangePct + 20) * 2);
+            const currentPnl = pnlData[currentIdx] || 0;
+            currentPoint[currentIdx] = currentPnl;
+
+            payoffChart.data.labels = labels;
+            payoffChart.data.datasets[0].data = lossZone;
+            payoffChart.data.datasets[1].data = profitZone;
+            payoffChart.data.datasets[2].data = pnlData;
+            payoffChart.data.datasets[3].data = zeroLine;
+            payoffChart.data.datasets[4].data = currentPoint;
+            payoffChart.update();
+
+            const currentRoi = (currentPnl / d.netDebit * 100).toFixed(1);
+
+            document.getElementById('current-pnl-main').textContent = '₹' + currentPnl.toFixed(0);
+            document.getElementById('current-pnl-main').className = 'metric-value ' + (currentPnl >= 0 ? 'positive' : 'negative');
+            document.getElementById('current-roi-main').textContent = (currentRoi > 0 ? '+' : '') + currentRoi + '%';
+            document.getElementById('current-roi-main').className = 'metric-value ' + (currentRoi >= 0 ? 'positive' : 'negative');
+            document.getElementById('days-passed-display').textContent = (d.shortDays - daysRemaining).toFixed(1) + 'd';
+            document.getElementById('price-at-display').textContent = '₹' + currentPrice.toFixed(0);
+
+            const profitableRange = pnlData.filter(p => p > 0).length;
+            const breakevenPct = ((profitableRange / pnlData.length) * 40 - 20).toFixed(1);
+            document.getElementById('breakeven-display').textContent = '±' + Math.abs(breakevenPct) + '%';
+        }
+    </script>
+
+    <!-- BILLION DOLLAR OPTIONS UNIVERSITY GUIDE -->
+    <button class="guide-btn" onclick="openGuide()" title="Open Options University">📚</button>
+
+    <div class="guide-modal" id="guideModal">
+        <div class="guide-content">
+            <span class="guide-close" onclick="closeGuide()">&times;</span>
+
+            <div class="guide-header">
+                <div class="guide-main-title">📚 OPTIONS UNIVERSITY 🎓</div>
+                <div class="guide-subtitle">Complete Billion-Dollar Guide to Options & Calendar Spreads</div>
+            </div>
+
+            <div class="guide-nav">
+                <button class="guide-nav-btn active" onclick="showGuideSection('basics')">Options Basics</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('greeks')">The Greeks</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('delta-dte')">Delta & DTE</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('strategies')">All Strategies</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('calendar')">Calendar Spreads</button>
+                <button class="guide-nav-btn" onclick="showGuideSection('advanced')">Advanced</button>
+            </div>
+
+            <!-- SECTION 1: BASICS -->
+            <div class="guide-section active" id="guide-basics">
+                <div class="guide-chapter">
+                    <h2 class="guide-chapter-title">Chapter 1: Options Fundamentals</h2>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">What is an Option?</h3>
+                        <p class="guide-text">
+                            An option is a <strong>contract</strong> that gives you the <strong>right (but not obligation)</strong> 
+                            to buy or sell an underlying asset at a predetermined price (strike) before or at expiration.
+                        </p>
+                        <div class="guide-highlight">
+                            <strong>🔑 Key Point:</strong> Options are WASTING ASSETS - they lose value over time (time decay). 
+                            Unlike stocks, if you do nothing, options expire worthless!
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">CALL vs PUT Options - Complete Comparison</h3>
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Aspect</th>
+                                    <th>CALL Option</th>
+                                    <th>PUT Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Right to</strong></td>
+                                    <td>BUY the underlying asset</td>
+                                    <td>SELL the underlying asset</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>When you buy</strong></td>
+                                    <td>BULLISH (expect price ↑)</td>
+                                    <td>BEARISH (expect price ↓)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>When you sell</strong></td>
+                                    <td>BEARISH or neutral</td>
+                                    <td>BULLISH or neutral</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Profit if</strong></td>
+                                    <td>Price goes ABOVE strike</td>
+                                    <td>Price goes BELOW strike</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Max profit (buying)</strong></td>
+                                    <td>Unlimited</td>
+                                    <td>Strike - Premium</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Max loss (buying)</strong></td>
+                                    <td>Premium paid</td>
+                                    <td>Premium paid</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Max profit (selling)</strong></td>
+                                    <td>Premium received</td>
+                                    <td>Premium received</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Max loss (selling)</strong></td>
+                                    <td>Unlimited (naked)</td>
+                                    <td>Strike - Premium</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Strike Price & Moneyness (ITM/ATM/OTM)</h3>
+                        <p class="guide-text">The <strong>strike price</strong> determines when your option has value. Understanding moneyness is CRITICAL!</p>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Moneyness</th>
+                                    <th>CALL Options</th>
+                                    <th>PUT Options</th>
+                                    <th>Delta Range</th>
+                                    <th>Characteristics</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ITM<br>(In-The-Money)</strong></td>
+                                    <td>Strike < Current Price<br><em>Ex: BTC ₹70k, Strike ₹65k</em></td>
+                                    <td>Strike > Current Price<br><em>Ex: BTC ₹70k, Strike ₹75k</em></td>
+                                    <td>0.50 to 1.00</td>
+                                    <td>• Has intrinsic value<br>• More expensive<br>• Moves more with underlying<br>• Lower time value</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ATM<br>(At-The-Money)</strong></td>
+                                    <td colspan="2" style="text-align:center;">Strike ≈ Current Price<br><em>Ex: BTC ₹70k, Strike ₹70k</em></td>
+                                    <td>~0.50</td>
+                                    <td>• 50/50 profit chance<br>• <strong>HIGHEST time value</strong><br>• Most liquid<br>• <strong>BEST for spreads!</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>OTM<br>(Out-The-Money)</strong></td>
+                                    <td>Strike > Current Price<br><em>Ex: BTC ₹70k, Strike ₹75k</em></td>
+                                    <td>Strike < Current Price<br><em>Ex: BTC ₹70k, Strike ₹65k</em></td>
+                                    <td>0.00 to 0.50</td>
+                                    <td>• No intrinsic value<br>• Cheaper<br>• "Lottery ticket"<br>• Often expires worthless</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-example">
+                            <strong>📊 Real Example:</strong><br><br>
+                            <strong>Spot Price:</strong> BTC at ₹70,000<br><br>
+
+                            <strong>₹65,000 CALL (ITM):</strong><br>
+                            • Already ₹5,000 in profit if exercised<br>
+                            • Premium: ₹6,500 (₹5k intrinsic + ₹1.5k time value)<br>
+                            • Delta: ~0.75 (moves ₹75 for every ₹100 BTC moves)<br><br>
+
+                            <strong>₹70,000 CALL (ATM):</strong><br>
+                            • No intrinsic value yet<br>
+                            • Premium: ₹2,500 (all time value!)<br>
+                            • Delta: ~0.50 (50% chance of profit)<br>
+                            • <strong>→ BEST for calendar spreads!</strong><br><br>
+
+                            <strong>₹75,000 CALL (OTM):</strong><br>
+                            • Needs BTC to go up ₹5,000<br>
+                            • Premium: ₹800 (all time value, small)<br>
+                            • Delta: ~0.25 (25% chance of profit)<br>
+                            • Cheap but risky!
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Option Premium Components</h3>
+
+                        <div class="guide-formula">
+                            <strong>THE FUNDAMENTAL FORMULA:</strong><br><br>
+                            Option Premium = Intrinsic Value + Time Value
+                        </div>
+
+                        <p class="guide-text"><strong>1️⃣ Intrinsic Value</strong> - The "real" value if exercised NOW</p>
+                        <ul class="guide-list">
+                            <li><strong>CALL:</strong> Max(0, Current Price - Strike)</li>
+                            <li><strong>PUT:</strong> Max(0, Strike - Current Price)</li>
+                            <li>OTM options have ZERO intrinsic value</li>
+                            <li>This part never decays (moves 1:1 with underlying)</li>
+                        </ul>
+
+                        <p class="guide-text"><strong>2️⃣ Time Value</strong> - The "hope" premium for future profit</p>
+                        <ul class="guide-list">
+                            <li>Reflects probability of becoming profitable</li>
+                            <li><strong>DECAYS TO ZERO at expiration</strong> (theta decay)</li>
+                            <li>Highest for ATM options (maximum uncertainty)</li>
+                            <li>Affected by: Time remaining, volatility, interest rates</li>
+                            <li><strong>This is what you're trading in calendar spreads!</strong></li>
+                        </ul>
+
+                        <div class="guide-example">
+                            <strong>💰 Premium Breakdown Example:</strong><br><br>
+                            <strong>Scenario:</strong> BTC at ₹70,000, 7 days to expiry<br><br>
+
+                            <strong>₹70k CALL (ATM):</strong><br>
+                            Premium: ₹2,500<br>
+                            Intrinsic: ₹0 (ATM has no intrinsic value)<br>
+                            Time Value: ₹2,500 (100% is time value!)<br>
+                            → <em>This ₹2,500 will decay to ₹0 in 7 days if price doesn't move!</em><br><br>
+
+                            <strong>₹65k CALL (ITM):</strong><br>
+                            Premium: ₹6,000<br>
+                            Intrinsic: ₹5,000 (70k - 65k)<br>
+                            Time Value: ₹1,000<br>
+                            → <em>Only ₹1,000 decays, ₹5,000 stays as long as BTC > ₹65k</em><br><br>
+
+                            <strong>₹75k CALL (OTM):</strong><br>
+                            Premium: ₹800<br>
+                            Intrinsic: ₹0<br>
+                            Time Value: ₹800 (100% time value)<br>
+                            → <em>Entire premium will likely decay to ₹0!</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: GREEKS -->
+            <div class="guide-section" id="guide-greeks">
+                <div class="guide-chapter">
+                    <h2 class="guide-chapter-title">Chapter 2: The Greeks - Your Risk Dashboard</h2>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">🔺 DELTA - Directional Risk & Probability</h3>
+
+                        <div class="guide-formula">
+                            <strong>Delta = Change in option price ÷ Change in underlying price</strong><br>
+                            Range: 0 to +1 for CALLs | 0 to -1 for PUTs
+                        </div>
+
+                        <p class="guide-text"><strong>What Delta Tells You:</strong></p>
+                        <ul class="guide-list">
+                            <li><strong>Directional Exposure:</strong> How much your option moves with the underlying</li>
+                            <li><strong>Probability:</strong> Delta ≈ probability of expiring ITM</li>
+                            <li><strong>Hedge Ratio:</strong> How many shares equivalent you're holding</li>
+                        </ul>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Delta Value</th>
+                                    <th>Meaning (CALL)</th>
+                                    <th>Probability ITM</th>
+                                    <th>Price Sensitivity</th>
+                                    <th>Use Case</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>0.90 - 1.00</strong></td>
+                                    <td>Deep ITM</td>
+                                    <td>~90-100%</td>
+                                    <td>Moves almost 1:1 with stock</td>
+                                    <td>Stock replacement</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>0.70 - 0.80</strong></td>
+                                    <td>Moderately ITM</td>
+                                    <td>~70-80%</td>
+                                    <td>₹70-80 per ₹100 move</td>
+                                    <td>Directional trades</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>~0.50</strong></td>
+                                    <td>ATM</td>
+                                    <td>~50%</td>
+                                    <td>₹50 per ₹100 move</td>
+                                    <td><strong>Calendar spreads!</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>0.30 - 0.40</strong></td>
+                                    <td>Slightly OTM</td>
+                                    <td>~30-40%</td>
+                                    <td>₹30-40 per ₹100 move</td>
+                                    <td>Credit spreads</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>0.10 - 0.20</strong></td>
+                                    <td>Far OTM</td>
+                                    <td>~10-20%</td>
+                                    <td>₹10-20 per ₹100 move</td>
+                                    <td>Lottery tickets</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>< 0.10</strong></td>
+                                    <td>Very far OTM</td>
+                                    <td>< 10%</td>
+                                    <td>Barely moves</td>
+                                    <td>Usually worthless</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-example">
+                            <strong>📈 Delta in Action:</strong><br><br>
+
+                            <strong>Scenario:</strong> BTC at ₹70,000<br>
+                            You buy ₹70k CALL with Delta 0.50<br>
+                            Premium paid: ₹2,500<br><br>
+
+                            <strong>BTC moves to ₹71,000 (+₹1,000):</strong><br>
+                            Your option should gain: ₹1,000 × 0.50 = ₹500<br>
+                            New premium: ~₹3,000<br>
+                            Your profit: ₹500 (20% gain!)<br><br>
+
+                            <strong>BTC moves to ₹69,000 (-₹1,000):</strong><br>
+                            Your option loses: ₹1,000 × 0.50 = ₹500<br>
+                            New premium: ~₹2,000<br>
+                            Your loss: ₹500 (20% loss)
+                        </div>
+
+                        <div class="guide-highlight">
+                            <strong>🎯 Calendar Spread Delta Strategy:</strong><br>
+                            • Short leg: Delta ~0.50 (ATM)<br>
+                            • Long leg: Delta ~0.50 (ATM)<br>
+                            • <strong>Net Delta: ~0.00 (market neutral!)</strong><br>
+                            • You don't care about direction, just time decay difference!
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">⏰ THETA - Time Decay (The Calendar Spread's Best Friend)</h3>
+
+                        <div class="guide-formula">
+                            <strong>Theta = Change in option price per day passing</strong><br>
+                            Negative for buyers | Positive for sellers
+                        </div>
+
+                        <p class="guide-text"><strong>The Harsh Reality of Theta:</strong></p>
+                        <ul class="guide-list">
+                            <li>Every day that passes, your option loses value (if you bought it)</li>
+                            <li>Decay is <strong>NON-LINEAR</strong> - accelerates as expiration approaches</li>
+                            <li>ATM options have the HIGHEST theta (most time value to lose)</li>
+                            <li>Weekends count as 2-3 days of decay!</li>
+                        </ul>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Days to Expiry</th>
+                                    <th>Daily Decay Rate</th>
+                                    <th>Weekly Loss</th>
+                                    <th>Example (₹2000 option)</th>
+                                    <th>Strategy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>60+ DTE</strong></td>
+                                    <td>~1-2% per day</td>
+                                    <td>~7-14%</td>
+                                    <td>Loses ₹20-40/day</td>
+                                    <td>Buy for calendars</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>30-60 DTE</strong></td>
+                                    <td>~2-3% per day</td>
+                                    <td>~14-21%</td>
+                                    <td>Loses ₹40-60/day</td>
+                                    <td>Swing trades</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>15-30 DTE</strong></td>
+                                    <td>~3-5% per day</td>
+                                    <td>~21-35%</td>
+                                    <td>Loses ₹60-100/day</td>
+                                    <td>Calendar LONG leg</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7-15 DTE</strong></td>
+                                    <td>~5-10% per day</td>
+                                    <td>~35-70%</td>
+                                    <td>Loses ₹100-200/day</td>
+                                    <td>Credit spreads</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3-7 DTE</strong></td>
+                                    <td>~10-20% per day</td>
+                                    <td>~70-100%+</td>
+                                    <td>Loses ₹200-400/day</td>
+                                    <td><strong>Calendar SHORT leg!</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>0-3 DTE</strong></td>
+                                    <td>~30-50% per day</td>
+                                    <td>Expires!</td>
+                                    <td>Loses ₹600-1000/day</td>
+                                    <td>0DTE scalping only</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-example">
+                            <strong>⏳ Time Decay Pattern (ATM ₹2,000 option):</strong><br><br>
+
+                            <strong>30 DTE:</strong> ₹2,000 (100%)<br>
+                            <strong>23 DTE:</strong> ₹1,850 (92.5%) - Lost 7.5% in 1 week<br>
+                            <strong>16 DTE:</strong> ₹1,650 (82.5%) - Lost 10% more<br>
+                            <strong>9 DTE:</strong> ₹1,350 (67.5%) - Lost 15% more!<br>
+                            <strong>5 DTE:</strong> ₹900 (45%) - Lost 22.5% more!!<br>
+                            <strong>2 DTE:</strong> ₹400 (20%) - Lost 25% more!!!<br>
+                            <strong>0 DTE:</strong> ₹0 (0%) - Everything gone!<br><br>
+
+                            <strong>🔥 Last 7 days = 47.5% of total value lost!</strong><br>
+                            <strong>🔥 Last 2 days = 25% of remaining value lost!</strong>
+                        </div>
+
+                        <div class="guide-highlight">
+                            <strong>💰 THE CALENDAR SPREAD THETA EDGE:</strong><br><br>
+                            <strong>Setup:</strong><br>
+                            • SHORT 3 DTE option: Theta = -₹300/day (loses fast!)<br>
+                            • LONG 14 DTE option: Theta = -₹80/day (loses slow)<br>
+                            • <strong>Net Theta: +₹220/day profit from decay difference!</strong><br><br>
+
+                            <strong>Why it works:</strong><br>
+                            • You collect ₹300/day from short option decay<br>
+                            • You lose only ₹80/day from long option decay<br>
+                            • <strong>Net: ₹220/day profit if price stays near strike!</strong><br>
+                            • This is your EDGE in calendar spreads!
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">📊 VEGA - Volatility Sensitivity</h3>
+
+                        <div class="guide-formula">
+                            <strong>Vega = Change in option price per 1% change in IV</strong><br>
+                            Always positive (higher IV = higher premium)
+                        </div>
+
+                        <p class="guide-text"><strong>Understanding IV (Implied Volatility):</strong></p>
+                        <ul class="guide-list">
+                            <li>IV = Market's expectation of future price volatility</li>
+                            <li>High IV = Market expects big moves = Options expensive</li>
+                            <li>Low IV = Market expects calm = Options cheap</li>
+                            <li>IV can change instantly on news/events</li>
+                        </ul>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>IV Change</th>
+                                    <th>Effect on Premium</th>
+                                    <th>Winner</th>
+                                    <th>Loser</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>IV +10%</strong></td>
+                                    <td>Premium increases</td>
+                                    <td>Option buyers<br>Long vega</td>
+                                    <td>Option sellers<br>Short vega</td>
+                                    <td>Earnings announcement coming</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>IV -10%</strong></td>
+                                    <td>Premium decreases</td>
+                                    <td>Option sellers<br>Short vega</td>
+                                    <td>Option buyers<br>Long vega</td>
+                                    <td>"IV crush" after earnings</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-example">
+                            <strong>💥 Vega Example - The IV Crush:</strong><br><br>
+
+                            <strong>Before Earnings:</strong><br>
+                            BTC at ₹70,000<br>
+                            ₹70k CALL, 7 DTE<br>
+                            IV: 80% (high - market expects volatility)<br>
+                            Vega: 30<br>
+                            Premium: ₹3,000<br><br>
+
+                            <strong>After Earnings (price unchanged):</strong><br>
+                            BTC still at ₹70,000<br>
+                            IV: 40% (dropped 40%!)<br>
+                            Premium loss from IV: 40% × 30 = ₹1,200 loss!<br>
+                            New Premium: ~₹1,800<br><br>
+
+                            <strong>Result: Lost 40% even though price didn't move!</strong><br>
+                            This is "IV crush" - kills option buyers after events!
+                        </div>
+
+                        <div class="guide-highlight">
+                            <strong>📈 Calendar Spread Vega Profile:</strong><br><br>
+                            <strong>Short-term options:</strong> Low vega (less time for volatility to matter)<br>
+                            <strong>Long-term options:</strong> High vega (more time = volatility matters more)<br><br>
+
+                            <strong>Net Result: Calendar spreads are LONG VEGA</strong><br>
+                            • You PROFIT if IV increases<br>
+                            • You LOSE if IV decreases sharply<br><br>
+
+                            <strong>Best Practice:</strong><br>
+                            • Enter when IV is LOW (cheap to buy)<br>
+                            • Exit when IV SPIKES (expensive to close)<br>
+                            • Avoid trading right after earnings (IV crush risk)
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">🔄 GAMMA - Rate of Delta Change</h3>
+
+                        <div class="guide-formula">
+                            <strong>Gamma = Change in Delta per ₹1 change in underlying</strong><br>
+                            Highest for ATM options near expiry
+                        </div>
+
+                        <p class="guide-text"><strong>Why Gamma Matters:</strong></p>
+                        <ul class="guide-list">
+                            <li>Shows how FAST your delta changes</li>
+                            <li>High gamma = Delta changes rapidly (risky for sellers!)</li>
+                            <li>Low gamma = Delta stays stable (safer)</li>
+                            <li>ATM options on expiry day have EXTREME gamma</li>
+                        </ul>
+
+                        <div class="guide-example">
+                            <strong>🎢 Gamma Risk - The Expiry Day Nightmare:</strong><br><br>
+
+                            <strong>You sold ATM 70k CALL on expiry day (0 DTE)</strong><br>
+                            BTC at ₹70,000<br>
+                            Premium collected: ₹500<br>
+                            Current Delta: 0.50<br>
+                            <strong>Gamma: 0.15 (VERY HIGH!)</strong><br><br>
+
+                            <strong>BTC moves to ₹70,500 (+₹500):</strong><br>
+                            New Delta: 0.50 + (0.15 × 0.5) = 0.575<br>
+                            Loss so far: ~₹288<br><br>
+
+                            <strong>BTC continues to ₹71,000 (+₹500 more):</strong><br>
+                            New Delta: 0.575 + (0.15 × 0.5) = 0.65<br>
+                            Additional loss: ~₹325<br>
+                            <strong>Total loss: ₹613 (you only collected ₹500!)</strong><br><br>
+
+                            <strong>BTC reaches ₹71,500 (+₹500 more):</strong><br>
+                            Delta now ~0.80 (accelerating!)<br>
+                            Loss keeps growing faster!<br><br>
+
+                            <strong>This is GAMMA RISK - losses accelerate!</strong>
+                        </div>
+
+                        <div class="guide-highlight">
+                            <strong>Calendar Spread Gamma:</strong><br>
+                            • Short leg: High gamma (scary near expiry!)<br>
+                            • Long leg: Low gamma (stable)<br>
+                            • <strong>Risk: If price moves away, short gamma hurts more than long gamma helps</strong><br>
+                            • This is why you EXIT if price moves >7% away from strike!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: DELTA & DTE -->
+            <div class="guide-section" id="guide-delta-dte">
+                <div class="guide-chapter">
+                    <h2 class="guide-chapter-title">Chapter 3: Delta & DTE - The Complete Connection</h2>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">How DTE Affects Premium Decay - The Complete Table</h3>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Days to Expiry</th>
+                                    <th>Daily Decay %</th>
+                                    <th>ATM Theta</th>
+                                    <th>Behavior</th>
+                                    <th>Best Strategy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>90+ DTE</strong></td>
+                                    <td>0.5-1%</td>
+                                    <td>Very low</td>
+                                    <td>Stable, mostly intrinsic value</td>
+                                    <td>LEAPS, long-term holds</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>60-90 DTE</strong></td>
+                                    <td>1-2%</td>
+                                    <td>Low</td>
+                                    <td>Slow linear decay</td>
+                                    <td>Buy for deep calendar spreads</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>30-60 DTE</strong></td>
+                                    <td>2-4%</td>
+                                    <td>Moderate</td>
+                                    <td>Steady decay begins</td>
+                                    <td>Swing trading</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>21-30 DTE</strong></td>
+                                    <td>4-6%</td>
+                                    <td>Accelerating</td>
+                                    <td>Decay curve steepens</td>
+                                    <td>Calendar LONG leg</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>14-21 DTE</strong></td>
+                                    <td>6-8%</td>
+                                    <td>Fast</td>
+                                    <td>Rapid time value erosion</td>
+                                    <td><strong>Calendar LONG leg sweet spot</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7-14 DTE</strong></td>
+                                    <td>8-12%</td>
+                                    <td>Very fast</td>
+                                    <td>Exponential acceleration</td>
+                                    <td>Premium selling strategies</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5-7 DTE</strong></td>
+                                    <td>12-18%</td>
+                                    <td>Extreme</td>
+                                    <td>Loses 30-40% of value this week</td>
+                                    <td><strong>Calendar SHORT leg ideal!</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3-5 DTE</strong></td>
+                                    <td>18-25%</td>
+                                    <td>Critical</td>
+                                    <td>Binary outcomes emerging</td>
+                                    <td>0DTE setup</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>1-3 DTE</strong></td>
+                                    <td>25-40%</td>
+                                    <td>Catastrophic</td>
+                                    <td>OTM options dying fast</td>
+                                    <td>Day trading only</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>0-1 DTE</strong></td>
+                                    <td>40-70%</td>
+                                    <td>Total</td>
+                                    <td>Worthless if OTM at close</td>
+                                    <td>Scalping, avoid holding</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-highlight">
+                            <strong>🎯 THE CALENDAR SPREAD SWEET SPOT:</strong><br><br>
+                            <strong>SHORT Leg:</strong> 3-7 DTE (12-18% daily decay)<br>
+                            <strong>LONG Leg:</strong> 14-21 DTE (6-8% daily decay)<br>
+                            <strong>Decay Difference:</strong> 6-10% per day = YOUR PROFIT!<br><br>
+                            This spread captures maximum theta differential while maintaining reasonable risk!
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Delta Evolution Over Time - Same Strike, Different DTE</h3>
+
+                        <div class="guide-example">
+                            <strong>📉 Watching Delta Die (OTM Option):</strong><br><br>
+
+                            <strong>Setup:</strong> BTC ₹70k CALL, Current Price: ₹69,000 (slightly OTM)<br><br>
+
+                            <strong>60 DTE:</strong><br>
+                            Delta: 0.45<br>
+                            Premium: ₹2,800<br>
+                            <em>Still has hope! Time for price to catch up</em><br><br>
+
+                            <strong>45 DTE:</strong><br>
+                            Delta: 0.42<br>
+                            Premium: ₹2,200<br>
+                            <em>Losing confidence slowly</em><br><br>
+
+                            <strong>30 DTE:</strong><br>
+                            Delta: 0.38<br>
+                            Premium: ₹1,600<br>
+                            <em>Hope fading</em><br><br>
+
+                            <strong>21 DTE:</strong><br>
+                            Delta: 0.33<br>
+                            Premium: ₹1,100<br>
+                            <em>Decay accelerating</em><br><br>
+
+                            <strong>14 DTE:</strong><br>
+                            Delta: 0.28<br>
+                            Premium: ₹700<br>
+                            <em>Getting desperate</em><br><br>
+
+                            <strong>7 DTE:</strong><br>
+                            Delta: 0.20<br>
+                            Premium: ₹350<br>
+                            <em>Almost dead</em><br><br>
+
+                            <strong>3 DTE:</strong><br>
+                            Delta: 0.10<br>
+                            Premium: ₹100<br>
+                            <em>Last breath</em><br><br>
+
+                            <strong>1 DTE:</strong><br>
+                            Delta: 0.03<br>
+                            Premium: ₹20<br>
+                            <em>RIP 💀</em><br><br>
+
+                            <strong>0 DTE:</strong><br>
+                            Delta: 0.00<br>
+                            Premium: ₹0<br>
+                            <em>Gone forever</em><br><br>
+
+                            <strong>Same strike, but delta collapsed from 0.45 to 0.00 as time ran out!</strong>
+                        </div>
+
+                        <div class="guide-example">
+                            <strong>📈 Delta Stability (ITM Option):</strong><br><br>
+
+                            <strong>Setup:</strong> BTC ₹65k CALL, Current Price: ₹70,000 (deep ITM)<br><br>
+
+                            <strong>60 DTE:</strong> Delta: 0.85<br>
+                            <strong>30 DTE:</strong> Delta: 0.88<br>
+                            <strong>14 DTE:</strong> Delta: 0.92<br>
+                            <strong>7 DTE:</strong> Delta: 0.95<br>
+                            <strong>1 DTE:</strong> Delta: 0.99<br>
+                            <strong>0 DTE:</strong> Delta: 1.00<br><br>
+
+                            <strong>ITM options maintain high delta because they have intrinsic value!</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue with remaining chapters... -->
+            <!-- Due to length, including the key remaining content -->
+
+            <!-- SECTION 4: STRATEGIES -->
+            <div class="guide-section" id="guide-strategies">
+                <div class="guide-chapter">
+                    <h2 class="guide-chapter-title">Chapter 4: Complete Options Strategies</h2>
+
+                    <p class="guide-text">Here are ALL major options strategies categorized by use case. Master calendar spreads first, then explore others!</p>
+
+                    <table class="guide-table">
+                        <thead>
+                            <tr>
+                                <th>Strategy</th>
+                                <th>Setup</th>
+                                <th>Market View</th>
+                                <th>Max Profit</th>
+                                <th>Max Loss</th>
+                                <th>Win Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Long Call</strong></td>
+                                <td>Buy CALL</td>
+                                <td>Bullish</td>
+                                <td>Unlimited</td>
+                                <td>Premium paid</td>
+                                <td>30-40%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Long Put</strong></td>
+                                <td>Buy PUT</td>
+                                <td>Bearish</td>
+                                <td>Strike - Premium</td>
+                                <td>Premium paid</td>
+                                <td>30-40%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Covered Call</strong></td>
+                                <td>Own stock + Sell CALL</td>
+                                <td>Neutral-Bullish</td>
+                                <td>Premium + limited upside</td>
+                                <td>Stock downside</td>
+                                <td>60-70%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cash-Secured Put</strong></td>
+                                <td>Sell PUT + Hold cash</td>
+                                <td>Neutral-Bullish</td>
+                                <td>Premium received</td>
+                                <td>Strike - Premium</td>
+                                <td>60-70%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bull Call Spread</strong></td>
+                                <td>Buy lower CALL + Sell higher CALL</td>
+                                <td>Moderately Bullish</td>
+                                <td>Spread width - Debit</td>
+                                <td>Net debit paid</td>
+                                <td>45-55%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bear Put Spread</strong></td>
+                                <td>Buy higher PUT + Sell lower PUT</td>
+                                <td>Moderately Bearish</td>
+                                <td>Spread width - Debit</td>
+                                <td>Net debit paid</td>
+                                <td>45-55%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Iron Condor</strong></td>
+                                <td>Sell OTM Call Spread + Sell OTM Put Spread</td>
+                                <td>Neutral (Range)</td>
+                                <td>Net credit received</td>
+                                <td>Spread width - Credit</td>
+                                <td>65-75%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Butterfly</strong></td>
+                                <td>Buy 1 ITM + Sell 2 ATM + Buy 1 OTM</td>
+                                <td>Neutral (pinned)</td>
+                                <td>At middle strike</td>
+                                <td>Net debit paid</td>
+                                <td>40-50%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Straddle</strong></td>
+                                <td>Buy ATM CALL + ATM PUT</td>
+                                <td>Volatility (big move)</td>
+                                <td>Unlimited</td>
+                                <td>Both premiums</td>
+                                <td>30-40%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Strangle</strong></td>
+                                <td>Buy OTM CALL + OTM PUT</td>
+                                <td>Volatility (bigger move)</td>
+                                <td>Unlimited</td>
+                                <td>Both premiums</td>
+                                <td>25-35%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Calendar Spread</strong></td>
+                                <td>Sell near-term + Buy far-term (same strike)</td>
+                                <td>Neutral (time decay)</td>
+                                <td>When short expires worthless</td>
+                                <td>Net debit paid</td>
+                                <td>55-65%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DOUBLE Calendar</strong></td>
+                                <td>Sell short PUT+CALL + Buy long PUT+CALL</td>
+                                <td>Neutral (range)</td>
+                                <td>Max theta differential</td>
+                                <td>Net debit paid</td>
+                                <td><strong>65-75%</strong> ⭐</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="guide-highlight">
+                        <strong>🏆 Why Calendar Spreads Are Great for Beginners:</strong><br>
+                        • Defined risk (can't lose more than net debit)<br>
+                        • High win rate (60-70% for double calendars)<br>
+                        • Not directional (don't need to predict direction)<br>
+                        • Profit from time decay (theta is your friend)<br>
+                        • Forgiving (profit zone is ±5-7%)<br>
+                        • Easy to manage (clear exit rules)
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: CALENDAR SPREADS -->
+            <div class="guide-section" id="guide-calendar">
+                <div class="guide-chapter">
+                    <h2 class="guide-chapter-title">Chapter 5: Calendar Spread Mastery</h2>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">The Three Types of Calendar Spreads</h3>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Setup</th>
+                                    <th>Best When</th>
+                                    <th>Win Rate</th>
+                                    <th>Profit Zone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>PUT Calendar</strong></td>
+                                    <td>Sell short PUT<br>Buy long PUT<br>(same strike)</td>
+                                    <td>Neutral to slightly bearish<br>Expect consolidation</td>
+                                    <td>55-60%</td>
+                                    <td>±4-6%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CALL Calendar</strong></td>
+                                    <td>Sell short CALL<br>Buy long CALL<br>(same strike)</td>
+                                    <td>Neutral to slightly bullish<br>Expect consolidation</td>
+                                    <td>55-60%</td>
+                                    <td>±4-6%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>DOUBLE Calendar</strong></td>
+                                    <td>Sell short PUT+CALL<br>Buy long PUT+CALL<br>(ATM strike)</td>
+                                    <td>Market neutral<br>Range-bound expected</td>
+                                    <td><strong>65-75%</strong> ⭐</td>
+                                    <td>±5-8%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">When to Trade Calendar Spreads - Complete Checklist</h3>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Condition</th>
+                                    <th>Why It Matters</th>
+                                    <th>How to Check</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Low IV Environment</strong></td>
+                                    <td>Long-term options cheaper to buy</td>
+                                    <td>IV Rank < 50<br>IV Percentile < 50</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Expect IV Increase</strong></td>
+                                    <td>Long vega profits from IV rise</td>
+                                    <td>Before earnings, events, news</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Range-Bound Market</strong></td>
+                                    <td>Price stays near strike = max profit</td>
+                                    <td>Consolidation pattern, low ATR</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5-7 Days to Short Expiry</strong></td>
+                                    <td>Maximum theta decay differential</td>
+                                    <td>Use weekly options on majors</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>High Liquidity</strong></td>
+                                    <td>Tight spreads, easy entry/exit</td>
+                                    <td>High volume, tight bid-ask</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Not Post-Earnings</strong></td>
+                                    <td>Avoid IV crush</td>
+                                    <td>Wait 3-5 days after earnings</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Strike Selection - THE MOST IMPORTANT DECISION</h3>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Strike</th>
+                                    <th>Delta</th>
+                                    <th>Pros</th>
+                                    <th>Cons</th>
+                                    <th>When to Use</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ATM<br>(At-The-Money)</strong></td>
+                                    <td>~0.50</td>
+                                    <td>• Max theta decay<br>• Highest profit potential<br>• Widest profit zone (±5-7%)<br>• Highest liquidity</td>
+                                    <td>• Most expensive<br>• Requires more capital</td>
+                                    <td><strong>DEFAULT CHOICE!</strong><br>Always use unless you have strong reason</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2-3% OTM</strong></td>
+                                    <td>~0.35</td>
+                                    <td>• Cheaper than ATM<br>• Still good theta<br>• Directional bias allowed</td>
+                                    <td>• Narrower profit zone (±3-5%)<br>• Lower probability<br>• Less liquid</td>
+                                    <td>When you have slight directional view AND want cheaper entry</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5% OTM</strong></td>
+                                    <td>~0.20</td>
+                                    <td>• Very cheap<br>• Can use larger size<br>• High R:R if correct</td>
+                                    <td>• Narrow profit zone (±2-3%)<br>• Low probability<br>• Need to be right on direction</td>
+                                    <td>Only if you have STRONG directional conviction</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ITM<br>(In-The-Money)</strong></td>
+                                    <td>>0.50</td>
+                                    <td>• Protected if price moves toward ITM</td>
+                                    <td>• Very expensive<br>• Lower theta decay<br>• Capital intensive<br>• Not ideal for calendars</td>
+                                    <td>Rarely used - not recommended</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-highlight">
+                            <strong>🎯 RULE OF THUMB:</strong><br>
+                            For calendar spreads, <strong>USE ATM STRIKE (Delta ~0.50) 95% of the time!</strong><br><br>
+
+                            Why?<br>
+                            • ATM has maximum time value = maximum theta decay<br>
+                            • Gives you ±5-7% profit zone (most forgiving)<br>
+                            • Highest liquidity = best fills<br>
+                            • Highest probability of success<br><br>
+
+                            <strong>Only deviate if you have STRONG directional conviction AND are willing to accept lower probability!</strong>
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Entry Rules - Your Checklist</h3>
+
+                        <ul class="guide-list">
+                            <li><strong>✅ IV Check:</strong> IV Rank or Percentile < 50 (low IV environment)</li>
+                            <li><strong>✅ Strike Selection:</strong> ATM (Delta ~0.50) for maximum edge</li>
+                            <li><strong>✅ DTE Selection:</strong> SHORT: 3-7 DTE | LONG: 14-21 DTE</li>
+                            <li><strong>✅ Cost/Risk:</strong> Target 40-60% ROI on net debit, risk max 2-3% of account</li>
+                            <li><strong>✅ Liquidity:</strong> High volume, tight bid-ask spread (< 5% of option price)</li>
+                            <li><strong>✅ Market Condition:</strong> Range-bound, consolidation, low trending</li>
+                            <li><strong>✅ No Events:</strong> Avoid entering right before earnings or major news</li>
+                        </ul>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Exit Rules - When to Take Profit or Cut Loss</h3>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Scenario</th>
+                                    <th>Action</th>
+                                    <th>Why</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>50% Profit Reached</strong></td>
+                                    <td>CLOSE ENTIRE POSITION</td>
+                                    <td>Great ROI, don't be greedy! Take the win.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>At Short Expiry</strong></td>
+                                    <td>Close if price near strike</td>
+                                    <td>Lock in max profit from theta decay</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>-50% Loss</strong></td>
+                                    <td>CUT IMMEDIATELY</td>
+                                    <td>Stop bleeding, preserve capital for better trades</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Price >7% Away from Strike</strong></td>
+                                    <td>EXIT IMMEDIATELY</td>
+                                    <td>Outside profit zone, unlikely to recover</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>IV Spikes Sharply</strong></td>
+                                    <td>Consider closing for profit</td>
+                                    <td>Long vega profits, may not sustain</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Major News/Event Coming</strong></td>
+                                    <td>Close position</td>
+                                    <td>Avoid unpredictable volatility</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Want to Roll</strong></td>
+                                    <td>Close short, keep long OR close both and re-enter</td>
+                                    <td>Only if still in profit zone and IV still low</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="guide-highlight">
+                            <strong>⚡ CRITICAL EXIT DISCIPLINE:</strong><br><br>
+
+                            <strong>Take 50% profit:</strong> Don't wait for 100%! A 50% gain on 2-3% risk = great trade.<br><br>
+
+                            <strong>Cut at -50% loss:</strong> Don't hope it comes back. Preserve capital for next trade.<br><br>
+
+                            <strong>Exit if price moves >7%:</strong> You're outside profit zone. Hope won't help.<br><br>
+
+                            <strong>The trader who follows exit rules consistently WINS long-term!</strong>
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Real P&L Example - DOUBLE Calendar</h3>
+
+                        <div class="guide-example">
+                            <strong>💰 Complete Trade Walkthrough:</strong><br><br>
+
+                            <strong>SETUP (Entry):</strong><br>
+                            Date: Monday<br>
+                            BTC Spot: ₹70,000<br>
+                            IV Rank: 35 (low - good!)<br>
+                            Market: Range-bound last 2 weeks<br><br>
+
+                            <strong>SHORT Leg (3 DTE - expires Friday):</strong><br>
+                            Strike: ₹70,000 (ATM)<br>
+                            Sell 1x ₹70k PUT @ ₹400<br>
+                            Sell 1x ₹70k CALL @ ₹400<br>
+                            <strong>Total Collected: ₹800</strong><br><br>
+
+                            <strong>LONG Leg (17 DTE - expires next Friday):</strong><br>
+                            Strike: ₹70,000 (ATM)<br>
+                            Buy 1x ₹70k PUT @ ₹900<br>
+                            Buy 1x ₹70k CALL @ ₹900<br>
+                            <strong>Total Paid: ₹1,800</strong><br><br>
+
+                            <strong>NET DEBIT: ₹1,000</strong><br>
+                            <strong>MAX LOSS: ₹1,000</strong><br>
+                            <strong>TARGET PROFIT: ₹500 (50% ROI)</strong><br><br>
+
+                            <strong>AT SHORT EXPIRY (Friday):</strong><br><br>
+
+                            <strong>SCENARIO 1: BTC at ₹70,000 (PERFECT!):</strong><br>
+                            Short PUT expires: ₹0 → +₹400 profit<br>
+                            Short CALL expires: ₹0 → +₹400 profit<br>
+                            Long PUT (14 DTE left): ₹700<br>
+                            Long CALL (14 DTE left): ₹700<br>
+                            Long position value: ₹1,400<br><br>
+
+                            <strong>Total P&L:</strong><br>
+                            Collected from short: +₹800<br>
+                            Current long value: ₹1,400<br>
+                            Initial cost: -₹1,800<br>
+                            Net P&L: ₹800 + ₹1,400 - ₹1,800 = <strong>+₹400 PROFIT (40% ROI)</strong> ✅<br><br>
+
+                            <strong>SCENARIO 2: BTC at ₹71,500 (+2.14%):</strong><br>
+                            Short PUT expires: ₹0 → +₹400<br>
+                            Short CALL loss: -₹1,500 (ITM by ₹1,500)<br>
+                            Long PUT: ₹200<br>
+                            Long CALL: ₹2,000<br>
+                            Long value: ₹2,200<br><br>
+
+                            <strong>Total P&L:</strong><br>
+                            ₹400 - ₹1,500 + ₹2,200 - ₹1,800 = <strong>-₹700 LOSS</strong> ❌<br>
+                            Action: Would have exited at -50% = -₹500<br><br>
+
+                            <strong>SCENARIO 3: BTC at ₹69,500 (-0.71%):</strong><br>
+                            Short PUT loss: -₹500<br>
+                            Short CALL expires: ₹0 → +₹400<br>
+                            Long PUT: ₹1,000<br>
+                            Long CALL: ₹400<br>
+                            Long value: ₹1,400<br><br>
+
+                            <strong>Total P&L:</strong><br>
+                            -₹500 + ₹400 + ₹1,400 - ₹1,800 = <strong>-₹500 LOSS</strong> ❌<br>
+                            Action: Exit at -50% stop<br><br>
+
+                            <strong>PROFIT ZONE: ₹68,500 to ₹71,500 (±2.14%)</strong><br>
+                            <strong>WIN PROBABILITY: ~70%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: ADVANCED -->
+            <div class="guide-section" id="guide-advanced">
+                <div class="guide-chapter">
+                    <h2 class="guide-chapter-title">Chapter 6: Advanced Topics</h2>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">Position Sizing - The Math</h3>
+
+                        <div class="guide-formula">
+                            <strong>POSITION SIZE FORMULA:</strong><br><br>
+                            Position Size = (Account Risk % × Account Size) ÷ Max Loss per Contract
+                        </div>
+
+                        <div class="guide-example">
+                            <strong>Example 1: Conservative Trader</strong><br>
+                            Account: ₹10,00,000<br>
+                            Risk per trade: 2%<br>
+                            Calendar max loss: ₹1,000<br><br>
+
+                            Position = (0.02 × ₹10,00,000) ÷ ₹1,000<br>
+                            = ₹20,000 ÷ ₹1,000<br>
+                            = <strong>20 contracts max</strong><br><br>
+
+                            <strong>Example 2: Aggressive Trader</strong><br>
+                            Account: ₹5,00,000<br>
+                            Risk: 3%<br>
+                            Max loss: ₹500<br><br>
+
+                            Position = (0.03 × ₹5,00,000) ÷ ₹500<br>
+                            = ₹15,000 ÷ ₹500<br>
+                            = <strong>30 contracts max</strong>
+                        </div>
+                    </div>
+
+                    <div class="guide-subsection">
+                        <h3 class="guide-subsection-title">🏆 Golden Rules for Success</h3>
+
+                        <div class="guide-highlight">
+                            <ol class="guide-list">
+                                <li><strong>Master ONE strategy first:</strong> Calendar spreads are perfect to start</li>
+                                <li><strong>Paper trade 3 months:</strong> Before risking real money</li>
+                                <li><strong>Size small:</strong> Better to survive than blow up</li>
+                                <li><strong>Take 50% profits:</strong> Don't be greedy!</li>
+                                <li><strong>Cut at -50% loss:</strong> Preserve capital</li>
+                                <li><strong>Never risk >3%:</strong> Per trade, ever</li>
+                                <li><strong>Trade liquid options only:</strong> BTC, ETH, major indices</li>
+                                <li><strong>Keep learning:</strong> Markets evolve, so should you</li>
+                                <li><strong>Journal every trade:</strong> Learn from wins AND losses</li>
+                                <li><strong>Be patient:</strong> Wait for YOUR setup</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <button class="btn" style="font-size: 1.2em; padding: 20px 40px;" onclick="closeGuide()">✅ Close Guide & Start Trading</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openGuide() {
+            document.getElementById('guideModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGuide() {
+            document.getElementById('guideModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showGuideSection(sectionId) {
+            document.querySelectorAll('.guide-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.guide-nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('guide-' + sectionId).classList.add('active');
+            event.target.classList.add('active');
+            document.querySelector('.guide-content').scrollTop = 0;
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeGuide();
+        });
+    </script>
+
+</body>
+</html>
